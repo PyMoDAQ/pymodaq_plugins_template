@@ -1,6 +1,9 @@
-import distutils.dir_util
-from distutils.command import build
-import os, sys, re
+from plugin_info import SHORT_PLUGIN_NAME, packages_required, package_url, author_email, author, description
+PLUGIN_NAME = f'pymodaq_plugins_{SHORT_PLUGIN_NAME}'
+
+
+import importlib
+import sys
 try:
     import setuptools
     from setuptools import setup, find_packages
@@ -10,19 +13,19 @@ except ImportError:
     from distutils.core import setup
     from distutils.command import install
 
-from pymodaq_plugins.version import get_version
+version = importlib.import_module('.version', PLUGIN_NAME)
 
 with open('README.rst') as fd:
     long_description = fd.read()
 
 setupOpts = dict(
-    name='pymodaq_plugins_custom',
-    description='Hardware plugins for PyMoDAQ',
+    name=PLUGIN_NAME,
+    description=description,
     long_description=long_description,
-    license='MIT',
-    url='http://pymodaq.cnrs.fr',
-    author='Sébastien Weber',
-    author_email='sebastien.weber@cemes.fr',
+    license='CECILL B',
+    url=package_url,
+    author=author,
+    author_email=author_email,
     classifiers=[
         "Programming Language :: Python :: 3",
         "Development Status :: 5 - Production/Stable",
@@ -34,17 +37,17 @@ setupOpts = dict(
         "Operating System :: OS Independent",
         "Topic :: Software Development :: Libraries :: Python Modules",
         "Topic :: Software Development :: User Interfaces",
-        ],)
+    ], )
 
 
 setup(
-    version=get_version(),
+    version=version.get_version(),
     packages=find_packages(),
     package_data={'': ['*.dll']},
-    entry_points={'pymodaq.plugins': 'custom = pymodaq_plugins_custom'},
+    entry_points={'pymodaq.plugins': f'{SHORT_PLUGIN_NAME} = {PLUGIN_NAME}'},
     install_requires=[
         'pymodaq>=2.0',
-        ],
+        ]+packages_required,
     **setupOpts
 )
 

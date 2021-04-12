@@ -79,7 +79,7 @@ class DAQ_Move_Template(DAQ_Move_base):
         ## TODO for your custom plugin
         if param.name() == "a_parameter_you've_added_in_self.params":
            self.controller.your_method_to_apply_this_param_change()
-        elif ...
+#        elif ...
         ##
 
     def ini_stage(self, controller=None):

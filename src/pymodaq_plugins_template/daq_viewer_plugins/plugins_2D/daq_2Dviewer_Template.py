@@ -25,7 +25,7 @@ class DAQ_2DViewer_Template(DAQ_Viewer_base):
         ## TODO for your custom plugin
         if param.name() == "a_parameter_you've_added_in_self.params":
             self.controller.your_method_to_apply_this_param_change()
-        elif ...
+#        elif ...
 
     ##
 
@@ -70,8 +70,9 @@ class DAQ_2DViewer_Template(DAQ_Viewer_base):
             ## TODO for your custom plugin
             # initialize viewers pannel with the future type of data
             self.data_grabed_signal_temp.emit([DataFromPlugins(name='Mock1', data=["2D numpy array"],
-                                                  dim='Data2D', labels=['dat0']),
-                                                  x_axis=self.x_axis, y_axis=self.y_axis], )
+                                                  dim='Data2D', labels=['dat0'],
+                                                  x_axis=self.x_axis,
+                                                  y_axis=self.y_axis), ])
 
             ##############################
 

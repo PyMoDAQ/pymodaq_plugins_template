@@ -8,6 +8,9 @@ PLUGIN_NAME = f"pymodaq_plugins_{SHORT_PLUGIN_NAME}"
 
 from pathlib import Path
 
+if not SHORT_PLUGIN_NAME.isidentifier():
+    raise ValueError("'SHORT_PLUGIN_NAME = %s' is not a valid python identifier." % SHORT_PLUGIN_NAME)
+
 with open(str(Path(__file__).parent.joinpath(f'src/{PLUGIN_NAME}/VERSION')), 'r') as fvers:
     version = fvers.read().strip()
 

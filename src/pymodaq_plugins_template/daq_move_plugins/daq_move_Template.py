@@ -79,7 +79,8 @@ class DAQ_Move_Template(DAQ_Move_base):
         ## TODO for your custom plugin
         if param.name() == "a_parameter_you've_added_in_self.params":
            self.controller.your_method_to_apply_this_param_change()
-        elif ...
+        else:
+            pass
         ##
 
     def ini_stage(self, controller=None):
@@ -199,3 +200,26 @@ class DAQ_Move_Template(DAQ_Move_base):
       ##############################
 
 
+def main():
+    """
+    this method start a DAQ_Move object with this defined plugin as actuator
+    Returns
+    -------
+
+    """
+    import sys
+    from PyQt5 import QtWidgets
+    from pymodaq.daq_move.daq_move_main import DAQ_Move
+    from pathlib import Path
+    app = QtWidgets.QApplication(sys.argv)
+    Form = QtWidgets.QWidget()
+    prog = DAQ_Move(Form, title="test",)
+    Form.show()
+    prog.actuator = Path(__file__).stem[9:]
+    prog.init()
+
+    sys.exit(app.exec_())
+
+
+if __name__ == '__main__':
+    main()

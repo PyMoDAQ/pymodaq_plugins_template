@@ -1,5 +1,5 @@
 from pymodaq.daq_move.utility_classes import DAQ_Move_base  # base class
-from pymodaq.daq_move.utility_classes import comon_parameters  # common set of parameters for all actuators
+from pymodaq.daq_move.utility_classes import comon_parameters, main  # common set of parameters for all actuators
 from pymodaq.daq_utils.daq_utils import ThreadCommand, getLineInfo  # object used to send info back to the main thread
 from easydict import EasyDict as edict  # type of dict
 
@@ -202,26 +202,5 @@ class DAQ_Move_Template(DAQ_Move_base):
       ##############################
 
 
-def main():
-    """
-    this method start a DAQ_Move object with this defined plugin as actuator
-    Returns
-    -------
-
-    """
-    import sys
-    from PyQt5 import QtWidgets
-    from pymodaq.daq_move.daq_move_main import DAQ_Move
-    from pathlib import Path
-    app = QtWidgets.QApplication(sys.argv)
-    Form = QtWidgets.QWidget()
-    prog = DAQ_Move(Form, title="test",)
-    Form.show()
-    prog.actuator = Path(__file__).stem[9:]
-    prog.init()
-
-    sys.exit(app.exec_())
-
-
 if __name__ == '__main__':
-    main()
+    main(__file__)

@@ -52,7 +52,8 @@ class DAQ_Move_Template(DAQ_Move_base):
         float: The position obtained after scaling conversion.
         """
         ## TODO for your custom plugin
-        pos = self.controller.your_method_to_get_the_actuator_value()
+        raise NotImplemented  # when writing your own plugin remove this line
+        pos = self.controller.your_method_to_get_the_actuator_value()  # when writing your own plugin replace this line
         ##
 
         pos = self.get_position_with_scaling(pos)
@@ -65,7 +66,8 @@ class DAQ_Move_Template(DAQ_Move_base):
         Terminate the communication protocol
         """
         ## TODO for your custom plugin
-        self.controller.your_method_to_terminate_the_communication()
+        raise NotImplemented  # when writing your own plugin remove this line
+        self.controller.your_method_to_terminate_the_communication()  # when writing your own plugin replace this line
         ##
 
     def commit_settings(self, param):
@@ -119,7 +121,8 @@ class DAQ_Move_Template(DAQ_Move_base):
             else:  # Master stage
 
                 ## TODO for your custom plugin
-                self.controller = python_wrapper_of_your_instrument()  # any object that will control the stages
+                raise NotImplemented  # when writing your own plugin remove this line
+                self.controller = python_wrapper_of_your_instrument()  # when writing your own plugin replace this line
                 #####################################
 
             self.status.info = "Whatever info you want to log"
@@ -146,7 +149,8 @@ class DAQ_Move_Template(DAQ_Move_base):
         position = self.set_position_with_scaling(position)  # apply scaling if the user specified one
 
         ## TODO for your custom plugin
-        self.controller.your_method_to_set_an_absolute_value()
+        raise NotImplemented  # when writing your own plugin remove this line
+        self.controller.your_method_to_set_an_absolute_value()  # when writing your own plugin replace this line
         self.emit_status(ThreadCommand('Update_Status',['Some info you want to log']))
         ##############################
 
@@ -166,7 +170,8 @@ class DAQ_Move_Template(DAQ_Move_base):
         self.target_position = position + self.current_position
 
         ## TODO for your custom plugin
-        self.controller.your_method_to_set_a_relative_value()
+        raise NotImplemented  # when writing your own plugin remove this line
+        self.controller.your_method_to_set_a_relative_value()  # when writing your own plugin replace this line
         self.emit_status(ThreadCommand('Update_Status',['Some info you want to log']))
         ##############################
 
@@ -181,7 +186,8 @@ class DAQ_Move_Template(DAQ_Move_base):
         """
 
         ## TODO for your custom plugin
-        self.controller.your_method_to_get_to_a_known_reference()
+        raise NotImplemented  # when writing your own plugin remove this line
+        self.controller.your_method_to_get_to_a_known_reference()  # when writing your own plugin replace this line
         self.emit_status(ThreadCommand('Update_Status',['Some info you want to log']))
         ##############################
 
@@ -196,7 +202,8 @@ class DAQ_Move_Template(DAQ_Move_base):
       """
 
       ## TODO for your custom plugin
-      self.controller.your_method_to_stop_positioning()
+      raise NotImplemented  # when writing your own plugin remove this line
+      self.controller.your_method_to_stop_positioning()  # when writing your own plugin replace this line
       self.emit_status(ThreadCommand('Update_Status', ['Some info you want to log']))
       self.move_done() #to let the interface know the actuator stopped
       ##############################

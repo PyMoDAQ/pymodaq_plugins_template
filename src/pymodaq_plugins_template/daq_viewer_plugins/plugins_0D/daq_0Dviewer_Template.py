@@ -21,7 +21,7 @@ class DAQ_0DViewer_Template(DAQ_Viewer_base):
         """
         ## TODO for your custom plugin
         if param.name() == "a_parameter_you've_added_in_self.params":
-           self.controller.your_method_to_apply_this_param_change()
+           self.controller.your_method_to_apply_this_param_change()  # when writing your own plugin replace this line
 #        elif ...
         ##
 
@@ -49,7 +49,8 @@ class DAQ_0DViewer_Template(DAQ_Viewer_base):
                     self.controller = controller
             else:
                 ## TODO for your custom plugin
-                self.controller = python_wrapper_of_your_instrument()  # any object that will control the stages
+                raise NotImplemented  # when writing your own plugin remove this line
+                self.controller = python_wrapper_of_your_instrument()  # when writing your own plugin replace this line
                 #####################################
 
             ## TODO for your custom plugin
@@ -74,7 +75,8 @@ class DAQ_0DViewer_Template(DAQ_Viewer_base):
         Terminate the communication protocol
         """
         ## TODO for your custom plugin
-        self.controller.your_method_to_terminate_the_communication()
+        raise NotImplemented  # when writing your own plugin remove this line
+        self.controller.your_method_to_terminate_the_communication()  # when writing your own plugin replace this line
         ##
 
     def grab_data(self, Naverage=1, **kwargs):
@@ -87,14 +89,16 @@ class DAQ_0DViewer_Template(DAQ_Viewer_base):
         """
         ## TODO for your custom plugin
 
-        ##synchrone version (blocking function)
+        # synchrone version (blocking function)
+        raise NotImplemented  # when writing your own plugin remove this line
         data_tot = self.controller.your_method_to_start_a_grab_snap()
         self.data_grabed_signal.emit([DataFromPlugins(name='Mock1', data=data_tot,
                                                           dim='Data0D', labels=['dat0', 'data1'])])
         #########################################################
 
-        ##asynchrone version (non-blocking function with callback)
-        self.controller.your_method_to_start_a_grab_snap(self.callback)
+        # asynchrone version (non-blocking function with callback)
+        raise NotImplemented  # when writing your own plugin remove this line
+        self.controller.your_method_to_start_a_grab_snap(self.callback)  # when writing your own plugin replace this line
         #########################################################
 
 
@@ -107,7 +111,8 @@ class DAQ_0DViewer_Template(DAQ_Viewer_base):
     def stop(self):
 
         ## TODO for your custom plugin
-        self.controller.your_method_to_stop_acquisition()
+        raise NotImplemented  # when writing your own plugin remove this line
+        self.controller.your_method_to_stop_acquisition()  # when writing your own plugin replace this line
         self.emit_status(ThreadCommand('Update_Status', ['Some info you want to log']))
         ##############################
 

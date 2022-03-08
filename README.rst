@@ -1,11 +1,61 @@
-# PyMoDAQ Plugins
+pymodaq_plugins_template (??? Instruments)
+##########################################
 
-PyMoDAQ, Modular Data Acquisition with Python, is a set of **python** modules used to perform automated measurements. 
+.. the following must be adapted to your developped package, links to pypi, github  description...
 
-This repository contains various hardware plugins compatible with PyMoDAQ
+.. image:: https://img.shields.io/pypi/v/pymodaq_plugins_thorlabs.svg
+   :target: https://pypi.org/project/pymodaq_plugins_thorlabs/
+   :alt: Latest Version
 
-For an exhaustive list of the available plugins, see https://github.com/CEMES-CNRS/pymodaq_plugin_manager/blob/main/pymodaq_plugin_manager/doc/PluginList.md
+.. image:: https://readthedocs.org/projects/pymodaq/badge/?version=latest
+   :target: https://pymodaq.readthedocs.io/en/stable/?badge=latest
+   :alt: Documentation Status
 
-GitHub repo: https://github.com/CEMES-CNRS
+.. image:: https://github.com/CEMES-CNRS/pymodaq_plugins_thorlabs/workflows/Upload%20Python%20Package/badge.svg
+   :target: https://github.com/CEMES-CNRS/pymodaq_plugins_thorlabs
+   :alt: Publication Status
 
-Documentation: http://pymodaq.cnrs.fr/
+Set of PyMoDAQ plugins for instruments from ???
+
+
+Authors
+=======
+
+* Frist Author
+* Other author
+
+Instruments
+===========
+
+Below is the list of instruments included in this plugin
+
+Actuators
++++++++++
+
+* **yyy**: control of yyy actuators
+* **xxx**: control of xxx actuators
+
+Viewer0D
+++++++++
+
+* **yyy**: control of yyy 0D detector
+* **xxx**: control of xxx 0D detector
+
+Viewer1D
+++++++++
+
+* **yyy**: control of yyy 1D detector
+* **xxx**: control of xxx 1D detector
+
+
+Viewer2D
+++++++++
+
+* **yyy**: control of yyy 2D detector
+* **xxx**: control of xxx 2D detector
+
+
+Infos
+=====
+
+if needed for installation or other infos

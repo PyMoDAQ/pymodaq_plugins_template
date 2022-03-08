@@ -154,10 +154,7 @@ class DAQ_Move_Template(DAQ_Move_base):
         self.emit_status(ThreadCommand('Update_Status',['Some info you want to log']))
         ##############################
 
-
-
         self.target_position = position
-        self.poll_moving()  #start a loop to poll the current actuator value and compare it with target position
 
     def move_Rel(self, position):
         """ Move the actuator to the relative target actuator value defined by position
@@ -175,8 +172,6 @@ class DAQ_Move_Template(DAQ_Move_base):
         self.emit_status(ThreadCommand('Update_Status',['Some info you want to log']))
         ##############################
 
-        self.poll_moving()
-
     def move_Home(self):
         """
           Send the update status thread command.
@@ -190,7 +185,6 @@ class DAQ_Move_Template(DAQ_Move_base):
         self.controller.your_method_to_get_to_a_known_reference()  # when writing your own plugin replace this line
         self.emit_status(ThreadCommand('Update_Status',['Some info you want to log']))
         ##############################
-
 
     def stop_motion(self):
       """

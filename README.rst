@@ -21,8 +21,16 @@ Set of PyMoDAQ plugins for instruments from ???
 Authors
 =======
 
-* Frist Author
-* Other author
+* First Author  (myemail@xxx.org)
+* Other author (myotheremail@xxx.org)
+
+.. if needed use this field
+
+    Contributors
+    ============
+
+    * First Contributor
+    * Other Contributors
 
 Instruments
 ===========

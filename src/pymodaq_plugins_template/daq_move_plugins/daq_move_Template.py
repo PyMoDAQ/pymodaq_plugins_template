@@ -26,6 +26,10 @@ class DAQ_Move_Template(DAQ_Move_base):
                 ] +\
              comon_parameters_fun(is_multiaxes, axes_names)
 
+    def ini_attributes(self):
+        #TODO declare here attributes you want/need to init with a default value
+        self.controller = None
+
     def get_actuator_value(self):
         """Get the current value from the hardware with scaling conversion.
 

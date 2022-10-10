@@ -23,8 +23,7 @@ class DAQ_Move_Template(DAQ_Move_base):
     axes_names = ['Axis1', 'Axis2']  # TODO for your plugin: complete the list
 
     params = [   # TODO for your custom plugin: elements to be added here as dicts in order to control your custom stage
-                ] +\
-             comon_parameters_fun(is_multiaxes, axes_names)
+                ] + comon_parameters_fun(is_multiaxes, axes_names)
 
     def ini_attributes(self):
         #TODO declare here attributes you want/need to init with a default value
@@ -40,8 +39,6 @@ class DAQ_Move_Template(DAQ_Move_base):
         ## TODO for your custom plugin
         raise NotImplemented  # when writing your own plugin remove this line
         pos = self.controller.your_method_to_get_the_actuator_value()  # when writing your own plugin replace this line
-        ##
-
         pos = self.get_position_with_scaling(pos)
         return pos
 
@@ -103,7 +100,6 @@ class DAQ_Move_Template(DAQ_Move_base):
         raise NotImplemented  # when writing your own plugin remove this line
         self.controller.your_method_to_set_an_absolute_value()  # when writing your own plugin replace this line
         self.emit_status(ThreadCommand('Update_Status', ['Some info you want to log']))
-        ##############################
         self.target_position = value
 
     def move_rel(self, value):
@@ -120,7 +116,7 @@ class DAQ_Move_Template(DAQ_Move_base):
         raise NotImplemented  # when writing your own plugin remove this line
         self.controller.your_method_to_set_a_relative_value()  # when writing your own plugin replace this line
         self.emit_status(ThreadCommand('Update_Status', ['Some info you want to log']))
-        ##############################
+
 
     def move_home(self):
         """Call the reference method of the controller"""
@@ -129,7 +125,7 @@ class DAQ_Move_Template(DAQ_Move_base):
         raise NotImplemented  # when writing your own plugin remove this line
         self.controller.your_method_to_get_to_a_known_reference()  # when writing your own plugin replace this line
         self.emit_status(ThreadCommand('Update_Status', ['Some info you want to log']))
-        ##############################
+
 
     def stop_motion(self):
       """Stop the actuator and emits move_done signal"""

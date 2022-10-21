@@ -1,7 +1,10 @@
-from pymodaq.daq_move.utility_classes import DAQ_Move_base  # base class
-from pymodaq.daq_move.utility_classes import comon_parameters_fun, main  # common set of parameters for all actuators
-from pymodaq.daq_utils.daq_utils import ThreadCommand, getLineInfo  # object used to send info back to the main thread
-from easydict import EasyDict as edict  # type of dict
+from pymodaq.control_modules.move_utility_classes import DAQ_Move_base, comon_parameters_fun, main  # common set of parameters for all actuators
+from pymodaq.daq_utils.daq_utils import ThreadCommand # object used to send info back to the main thread
+
+
+class PythonWrapperOfYourInstrument:
+    #  TODO Replace this fake class with the import of the real python wrapper of your instrument
+    pass
 
 
 class DAQ_Move_Template(DAQ_Move_base):
@@ -19,15 +22,19 @@ class DAQ_Move_Template(DAQ_Move_base):
 
     """
     _controller_units = 'whatever'  # TODO for your plugin: put the correct unit here
-    is_multiaxes = True  # TODO for your plugin set to True if this plugin is controlled for a multiaxis controller
+    is_multiaxes = False  # TODO for your plugin set to True if this plugin is controlled for a multiaxis controller
     axes_names = ['Axis1', 'Axis2']  # TODO for your plugin: complete the list
 
     params = [   # TODO for your custom plugin: elements to be added here as dicts in order to control your custom stage
                 ] + comon_parameters_fun(is_multiaxes, axes_names)
 
     def ini_attributes(self):
+        #  TODO declare the type of the wrapper (and assign it to self.controller) you're going to use for easy
+        #  autocompletion
+        self.controller: PythonWrapperOfYourInstrument = None
+
         #TODO declare here attributes you want/need to init with a default value
-        self.controller = None
+        pass
 
     def get_actuator_value(self):
         """Get the current value from the hardware with scaling conversion.
@@ -78,11 +85,11 @@ class DAQ_Move_Template(DAQ_Move_base):
         """
 
         raise NotImplemented  # TODO when writing your own plugin remove this line and modify the one below
-        self.controller = self.ini_stage_init(old_controller=controller,
-                                              new_controller=python_wrapper_of_your_instrument())
+        self.ini_stage_init(old_controller=controller,
+                            new_controller=PythonWrapperOfYourInstrument())
 
         info = "Whatever info you want to log"
-        initialized = True  # or False if your hardware coun't be initialized
+        initialized = self.controller.a_method_or_atttribute_to_check_if_init()  # todo
         return info, initialized
 
     def move_abs(self, value):
@@ -94,13 +101,13 @@ class DAQ_Move_Template(DAQ_Move_base):
         """
 
         value = self.check_bound(value)  #if user checked bounds, the defined bounds are applied here
+        self.target_position = value
         value = self.set_position_with_scaling(value)  # apply scaling if the user specified one
-
         ## TODO for your custom plugin
         raise NotImplemented  # when writing your own plugin remove this line
-        self.controller.your_method_to_set_an_absolute_value()  # when writing your own plugin replace this line
+        self.controller.your_method_to_set_an_absolute_value(value)  # when writing your own plugin replace this line
         self.emit_status(ThreadCommand('Update_Status', ['Some info you want to log']))
-        self.target_position = value
+
 
     def move_rel(self, value):
         """ Move the actuator to the relative target actuator value defined by value
@@ -111,10 +118,11 @@ class DAQ_Move_Template(DAQ_Move_base):
         """
         value = self.check_bound(self.current_position + value) - self.current_position
         self.target_position = value + self.current_position
+        value = self.set_position_relative_with_scaling(value)
 
         ## TODO for your custom plugin
         raise NotImplemented  # when writing your own plugin remove this line
-        self.controller.your_method_to_set_a_relative_value()  # when writing your own plugin replace this line
+        self.controller.your_method_to_set_a_relative_value(value)  # when writing your own plugin replace this line
         self.emit_status(ThreadCommand('Update_Status', ['Some info you want to log']))
 
 

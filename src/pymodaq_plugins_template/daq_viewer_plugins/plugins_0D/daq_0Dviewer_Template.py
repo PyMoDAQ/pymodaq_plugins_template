@@ -1,7 +1,11 @@
 import numpy as np
-from easydict import EasyDict as edict
-from pymodaq.daq_utils.daq_utils import ThreadCommand, getLineInfo, DataFromPlugins
+from pymodaq.daq_utils.daq_utils import ThreadCommand, DataFromPlugins
 from pymodaq.daq_viewer.utility_classes import DAQ_Viewer_base, comon_parameters, main
+
+
+class PythonWrapperOfYourInstrument:
+    #  TODO Replace this fake class with the import of the real python wrapper of your instrument
+    pass
 
 
 class DAQ_0DViewer_Template(DAQ_Viewer_base):
@@ -12,8 +16,12 @@ class DAQ_0DViewer_Template(DAQ_Viewer_base):
         ]
 
     def ini_attributes(self):
+        #  TODO declare the type of the wrapper (and assign it to self.controller) you're going to use for easy
+        #  autocompletion
+        self.controller: PythonWrapperOfYourInstrument = None
+
         #TODO declare here attributes you want/need to init with a default value
-        self.controller = None
+        pass
 
     def commit_settings(self, param):
         """Apply the consequences of a change of value in the detector settings
@@ -46,14 +54,16 @@ class DAQ_0DViewer_Template(DAQ_Viewer_base):
         """
 
         raise NotImplemented  # TODO when writing your own plugin remove this line and modify the one below
-        self.controller = self.ini_detector_init(old_controller=controller,
-                                                 new_controller=python_wrapper_of_your_instrument())
+        self.ini_detector_init(old_controller=controller,
+                               new_controller=PythonWrapperOfYourInstrument())
+
         # TODO for your custom plugin (optional) initialize viewers panel with the future type of data
         self.data_grabed_signal_temp.emit([DataFromPlugins(name='Mock1',data=[np.array([0]), np.array([0])],
                                                            dim='Data0D',
                                                            labels=['Mock1', 'label2'])])
+
         info = "Whatever info you want to log"
-        initialized = True
+        initialized = self.controller.a_method_or_atttribute_to_check_if_init()  # TODO
         return info, initialized
 
     def close(self):

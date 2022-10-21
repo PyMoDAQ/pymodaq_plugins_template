@@ -4,6 +4,11 @@ from pymodaq.daq_utils.daq_utils import ThreadCommand, getLineInfo, DataFromPlug
 from pymodaq.daq_viewer.utility_classes import DAQ_Viewer_base, comon_parameters, main
 
 
+class PythonWrapperOfYourInstrument:
+    #  TODO Replace this fake class with the import of the real python wrapper of your instrument
+    pass
+
+
 class DAQ_1DViewer_Template(DAQ_Viewer_base):
     """
     """
@@ -14,7 +19,12 @@ class DAQ_1DViewer_Template(DAQ_Viewer_base):
         ]
 
     def ini_attributes(self):
+        #  TODO declare the type of the wrapper (and assign it to self.controller) you're going to use for easy
+        #  autocompletion
+        self.controller: PythonWrapperOfYourInstrument = None
+
         # TODO declare here attributes you want/need to init with a default value
+
         self.x_axis = None
 
     def commit_settings(self, param):
@@ -48,17 +58,15 @@ class DAQ_1DViewer_Template(DAQ_Viewer_base):
         """
 
         raise NotImplemented  # TODO when writing your own plugin remove this line and modify the one below
-        self.controller = self.ini_detector_init(old_controller=controller,
-                                                 new_controller=python_wrapper_of_your_instrument())
+        self.ini_detector_init(old_controller=controller,
+                               new_controller=PythonWrapperOfYourInstrument())
 
         ## TODO for your custom plugin
         # get the x_axis (you may want to to this also in the commit settings if x_axis may have changed
         data_x_axis = self.controller.your_method_to_get_the_x_axis() # if possible
         self.x_axis = Axis(data=data_x_axis, label='', units='')
-        self.emit_x_axis()
 
-        ## TODO for your custom plugin
-        #initialize viewers pannel with the future type of data
+        # TODO for your custom plugin. Initialize viewers pannel with the future type of data
         self.data_grabed_signal_temp.emit([DataFromPlugins(name='Mock1',
                                                            data=[np.array([0., 0., ...]), np.array([0., 0., ...])],
                                                            dim='Data1D', labels=['Mock1', 'label2'],

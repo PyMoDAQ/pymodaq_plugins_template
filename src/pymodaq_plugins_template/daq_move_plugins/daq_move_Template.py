@@ -1,6 +1,6 @@
 from pymodaq.control_modules.move_utility_classes import DAQ_Move_base, comon_parameters_fun, main  # common set of parameters for all actuators
 from pymodaq.daq_utils.daq_utils import ThreadCommand # object used to send info back to the main thread
-
+from pymodaq.daq_utils.parameter import Parameter
 
 class PythonWrapperOfYourInstrument:
     #  TODO Replace this fake class with the import of the real python wrapper of your instrument
@@ -55,7 +55,7 @@ class DAQ_Move_Template(DAQ_Move_base):
         raise NotImplemented  # when writing your own plugin remove this line
         #  self.controller.your_method_to_terminate_the_communication()  # when writing your own plugin replace this line
 
-    def commit_settings(self, param):
+    def commit_settings(self, param: Parameter):
         """Apply the consequences of a change of value in the detector settings
 
         Parameters

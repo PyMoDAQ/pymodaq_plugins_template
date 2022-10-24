@@ -1,7 +1,7 @@
 import numpy as np
 from pymodaq.daq_utils.daq_utils import ThreadCommand, DataFromPlugins
 from pymodaq.daq_viewer.utility_classes import DAQ_Viewer_base, comon_parameters, main
-
+from pymodaq.daq_utils.parameter import Parameter
 
 class PythonWrapperOfYourInstrument:
     #  TODO Replace this fake class with the import of the real python wrapper of your instrument
@@ -23,7 +23,7 @@ class DAQ_0DViewer_Template(DAQ_Viewer_base):
         #TODO declare here attributes you want/need to init with a default value
         pass
 
-    def commit_settings(self, param):
+    def commit_settings(self, param: Parameter):
         """Apply the consequences of a change of value in the detector settings
 
         Parameters

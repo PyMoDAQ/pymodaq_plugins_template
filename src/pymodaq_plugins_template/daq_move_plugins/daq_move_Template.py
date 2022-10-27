@@ -1,6 +1,6 @@
 from pymodaq.control_modules.move_utility_classes import DAQ_Move_base, comon_parameters_fun, main  # common set of parameters for all actuators
-from pymodaq.daq_utils.daq_utils import ThreadCommand # object used to send info back to the main thread
-from pymodaq.daq_utils.parameter import Parameter
+from pymodaq.utils.daq_utils import ThreadCommand # object used to send info back to the main thread
+from pymodaq.utils.parameter import Parameter
 
 class PythonWrapperOfYourInstrument:
     #  TODO Replace this fake class with the import of the real python wrapper of your instrument
@@ -101,7 +101,7 @@ class DAQ_Move_Template(DAQ_Move_base):
         """
 
         value = self.check_bound(value)  #if user checked bounds, the defined bounds are applied here
-        self.target_position = value
+        self.target_value = value
         value = self.set_position_with_scaling(value)  # apply scaling if the user specified one
         ## TODO for your custom plugin
         raise NotImplemented  # when writing your own plugin remove this line
@@ -117,7 +117,7 @@ class DAQ_Move_Template(DAQ_Move_base):
         value: (float) value of the relative target positioning
         """
         value = self.check_bound(self.current_position + value) - self.current_position
-        self.target_position = value + self.current_position
+        self.target_value = value + self.current_position
         value = self.set_position_relative_with_scaling(value)
 
         ## TODO for your custom plugin

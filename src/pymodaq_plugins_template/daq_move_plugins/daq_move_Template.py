@@ -27,6 +27,9 @@ class DAQ_Move_Template(DAQ_Move_base):
 
     params = [   # TODO for your custom plugin: elements to be added here as dicts in order to control your custom stage
                 ] + comon_parameters_fun(is_multiaxes, axes_names)
+    # _epsilon is the initial default value for the epsilon parameter allowing pymodaq to know if the controller reached
+    # the target value. It is the developer responsibility to put here a meaningful value
+    _epsilon = 0.1  # TODO replace this by a value that is correct depending on your controller
 
     def ini_attributes(self):
         #  TODO declare the type of the wrapper (and assign it to self.controller) you're going to use for easy

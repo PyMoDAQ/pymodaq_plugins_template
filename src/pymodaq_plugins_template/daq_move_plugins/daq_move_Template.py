@@ -24,12 +24,12 @@ class DAQ_Move_Template(DAQ_Move_base):
     _controller_units = 'whatever'  # TODO for your plugin: put the correct unit here
     is_multiaxes = False  # TODO for your plugin set to True if this plugin is controlled for a multiaxis controller
     axes_names = ['Axis1', 'Axis2']  # TODO for your plugin: complete the list
+    _epsilon = 0.1  # TODO replace this by a value that is correct depending on your controller
 
     params = [   # TODO for your custom plugin: elements to be added here as dicts in order to control your custom stage
-                ] + comon_parameters_fun(is_multiaxes, axes_names)
+                ] + comon_parameters_fun(is_multiaxes, axes_names, epsilon=_epsilon)
     # _epsilon is the initial default value for the epsilon parameter allowing pymodaq to know if the controller reached
     # the target value. It is the developer responsibility to put here a meaningful value
-    _epsilon = 0.1  # TODO replace this by a value that is correct depending on your controller
 
     def ini_attributes(self):
         #  TODO declare the type of the wrapper (and assign it to self.controller) you're going to use for easy

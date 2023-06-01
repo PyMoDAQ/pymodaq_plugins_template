@@ -1,6 +1,7 @@
 from pymodaq.control_modules.move_utility_classes import DAQ_Move_base, comon_parameters_fun, main  # common set of parameters for all actuators
-from pymodaq.daq_utils.daq_utils import ThreadCommand # object used to send info back to the main thread
-from pymodaq.daq_utils.parameter import Parameter
+from pymodaq.utils.daq_utils import ThreadCommand # object used to send info back to the main thread
+from pymodaq.utils.parameter import Parameter
+
 
 class PythonWrapperOfYourInstrument:
     #  TODO Replace this fake class with the import of the real python wrapper of your instrument

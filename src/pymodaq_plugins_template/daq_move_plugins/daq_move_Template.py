@@ -88,8 +88,8 @@ class DAQ_Move_Template(DAQ_Move_base):
         """
 
         raise NotImplemented  # TODO when writing your own plugin remove this line and modify the one below
-        self.ini_stage_init(old_controller=controller,
-                            new_controller=PythonWrapperOfYourInstrument())
+        self.controller = self.ini_stage_init(old_controller=controller,
+                                              new_controller=PythonWrapperOfYourInstrument())
 
         info = "Whatever info you want to log"
         initialized = self.controller.a_method_or_atttribute_to_check_if_init()  # todo

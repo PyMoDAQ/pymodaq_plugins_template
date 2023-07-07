@@ -1,6 +1,6 @@
 import numpy as np
 from pymodaq.utils.daq_utils import ThreadCommand
-from pymodaq.utils.data import DataFromPlugins
+from pymodaq.utils.data import DataFromPlugins, DataToExport
 from pymodaq.control_modules.viewer_utility_classes import DAQ_Viewer_base, comon_parameters, main
 from pymodaq.utils.parameter import Parameter
 
@@ -60,9 +60,11 @@ class DAQ_0DViewer_Template(DAQ_Viewer_base):
                                new_controller=PythonWrapperOfYourInstrument())
 
         # TODO for your custom plugin (optional) initialize viewers panel with the future type of data
-        self.data_grabed_signal_temp.emit([DataFromPlugins(name='Mock1',data=[np.array([0]), np.array([0])],
-                                                           dim='Data0D',
-                                                           labels=['Mock1', 'label2'])])
+        self.dte_signal_temp.emit(DataToExport(name='myplugin',
+                                               data=DataFromPlugins(name='Mock1',
+                                                                    data=[np.array([0]), np.array([0])],
+                                                                    dim='Data0D',
+                                                                    labels=['Mock1', 'label2'])))
 
         info = "Whatever info you want to log"
         initialized = self.controller.a_method_or_atttribute_to_check_if_init()  # TODO
@@ -90,8 +92,9 @@ class DAQ_0DViewer_Template(DAQ_Viewer_base):
         # synchrone version (blocking function)
         raise NotImplemented  # when writing your own plugin remove this line
         data_tot = self.controller.your_method_to_start_a_grab_snap()
-        self.data_grabed_signal.emit([DataFromPlugins(name='Mock1', data=data_tot,
-                                                      dim='Data0D', labels=['dat0', 'data1'])])
+        self.dte_signal.emit(DataToExport(name='myplugin',
+                                          data=[DataFromPlugins(name='Mock1', data=data_tot,
+                                                                dim='Data0D', labels=['dat0', 'data1'])]))
         #########################################################
 
         # asynchrone version (non-blocking function with callback)
@@ -103,8 +106,9 @@ class DAQ_0DViewer_Template(DAQ_Viewer_base):
     def callback(self):
         """optional asynchrone method called when the detector has finished its acquisition of data"""
         data_tot = self.controller.your_method_to_get_data_from_buffer()
-        self.data_grabed_signal.emit([DataFromPlugins(name='Mock1', data=data_tot,
-                                                      dim='Data0D', labels=['dat0', 'data1'])])
+        self.dte_signal.emit(DataToExport(name='myplugin',
+                                          data=[DataFromPlugins(name='Mock1', data=data_tot,
+                                                                dim='Data0D', labels=['dat0', 'data1'])]))
 
     def stop(self):
         """Stop the current grab hardware wise if necessary"""

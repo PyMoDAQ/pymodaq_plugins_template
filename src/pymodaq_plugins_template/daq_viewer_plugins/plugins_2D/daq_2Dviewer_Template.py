@@ -1,5 +1,5 @@
 from pymodaq.utils.daq_utils import ThreadCommand
-from pymodaq.utils.data import DataFromPlugins, Axis
+from pymodaq.utils.data import DataFromPlugins, Axis, DataToExport
 from pymodaq.control_modules.viewer_utility_classes import DAQ_Viewer_base, comon_parameters, main
 from pymodaq.utils.parameter import Parameter
 
@@ -70,10 +70,11 @@ class DAQ_2DViewer_Template(DAQ_Viewer_base):
         self.y_axis = Axis(data=data_y_axis, label='', units='')
 
         ## TODO for your custom plugin. Initialize viewers pannel with the future type of data
-        self.data_grabed_signal_temp.emit([DataFromPlugins(name='Mock1', data=["2D numpy array"],
-                                                           dim='Data2D', labels=['dat0'],
-                                                           x_axis=self.x_axis,
-                                                           y_axis=self.y_axis), ])
+        self.dte_signal_temp.emit(DataToExport('myplugin',
+                                               data=[DataFromPlugins(name='Mock1', data=["2D numpy array"],
+                                                                     dim='Data2D', labels=['dat0'],
+                                                                     x_axis=self.x_axis,
+                                                                     y_axis=self.y_axis), ]))
 
         # note: you could either emit the x_axis, y_axis once (or a given place in the code) using self.emit_x_axis()
         # and self.emit_y_axis() as shown above. Or emit it at every grab filling it the x_axis and y_axis keys of
@@ -104,8 +105,11 @@ class DAQ_2DViewer_Template(DAQ_Viewer_base):
 
         ##synchrone version (blocking function)
         data_tot = self.controller.your_method_to_start_a_grab_snap()
-        self.data_grabed_signal.emit([DataFromPlugins(name='Mock1', data=data_tot,
-                                                      dim='Data2D', labels=['dat0'])])
+        self.dte_signal.emit(DataToExport('myplugin',
+                                          data=[DataFromPlugins(name='Mock1', data=data_tot,
+                                                                dim='Data2D', labels=['label1'],
+                                                                x_axis=self.x_axis,
+                                                                y_axis=self.y_axis), ]))
         # note: you could either emit the x_axis once (or a given place in the code) using self.emit_x_axis() as shown
         # above. Or emit it at every grab filling it the x_axis key of DataFromPlugins, not shown here)
 
@@ -116,9 +120,11 @@ class DAQ_2DViewer_Template(DAQ_Viewer_base):
     def callback(self):
         """optional asynchrone method called when the detector has finished its acquisition of data"""
         data_tot = self.controller.your_method_to_get_data_from_buffer()
-        self.data_grabed_signal.emit([DataFromPlugins(name='Mock1', data=data_tot,
-                                                      dim='Data2D', labels=['dat0'])])
-
+        self.dte_signal.emit(DataToExport('myplugin',
+                                          data=[DataFromPlugins(name='Mock1', data=data_tot,
+                                                                dim='Data2D', labels=['label1'],
+                                                                x_axis=self.x_axis,
+                                                                y_axis=self.y_axis), ]))
     def stop(self):
         """Stop the current grab hardware wise if necessary"""
         ## TODO for your custom plugin

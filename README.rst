@@ -32,6 +32,11 @@ Authors
     * First Contributor
     * Other Contributors
 
+.. if needed use this field
+
+  Depending on the plugin type, delete/complete the fields below
+
+
 Instruments
 ===========
 
@@ -61,6 +66,14 @@ Viewer2D
 
 * **yyy**: control of yyy 2D detector
 * **xxx**: control of xxx 2D detector
+
+
+PID Models
+++++++++++
+
+
+Extensions
+++++++++++
 
 
 Infos

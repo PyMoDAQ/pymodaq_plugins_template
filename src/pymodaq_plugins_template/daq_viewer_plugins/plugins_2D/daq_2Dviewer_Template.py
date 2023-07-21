@@ -63,18 +63,17 @@ class DAQ_2DViewer_Template(DAQ_Viewer_base):
         ## TODO for your custom plugin
         # get the x_axis (you may want to to this also in the commit settings if x_axis may have changed
         data_x_axis = self.controller.your_method_to_get_the_x_axis()  # if possible
-        self.x_axis = Axis(data=data_x_axis, label='', units='')
+        self.x_axis = Axis(data=data_x_axis, label='', units='', index=1)
 
         # get the y_axis (you may want to to this also in the commit settings if y_axis may have changed
         data_y_axis = self.controller.your_method_to_get_the_y_axis()  # if possible
-        self.y_axis = Axis(data=data_y_axis, label='', units='')
+        self.y_axis = Axis(data=data_y_axis, label='', units='', index=0)
 
         ## TODO for your custom plugin. Initialize viewers pannel with the future type of data
         self.dte_signal_temp.emit(DataToExport('myplugin',
                                                data=[DataFromPlugins(name='Mock1', data=["2D numpy array"],
                                                                      dim='Data2D', labels=['dat0'],
-                                                                     x_axis=self.x_axis,
-                                                                     y_axis=self.y_axis), ]))
+                                                                     axes=[self.x_axis, self.y_axis]), ]))
 
         # note: you could either emit the x_axis, y_axis once (or a given place in the code) using self.emit_x_axis()
         # and self.emit_y_axis() as shown above. Or emit it at every grab filling it the x_axis and y_axis keys of

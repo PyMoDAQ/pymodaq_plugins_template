@@ -75,8 +75,6 @@ class DAQ_1DViewer_Template(DAQ_Viewer_base):
                                                                      dim='Data1D', labels=['Mock1', 'label2'],
                                                                      axes=[self.x_axis])]))
 
-        # note: you could either emit the x_axis once (or a given place in the code) using self.emit_x_axis() as shown
-        # above. Or emit it at every grab filling it the x_axis key of DataFromPlugins)
         info = "Whatever info you want to log"
         initialized = True
         return info, initialized

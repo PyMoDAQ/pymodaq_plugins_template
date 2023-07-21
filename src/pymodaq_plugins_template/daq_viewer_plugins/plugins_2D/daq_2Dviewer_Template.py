@@ -105,8 +105,6 @@ class DAQ_2DViewer_Template(DAQ_Viewer_base):
                                                                 dim='Data2D', labels=['label1'],
                                                                 x_axis=self.x_axis,
                                                                 y_axis=self.y_axis), ]))
-        # note: you could either emit the x_axis once (or a given place in the code) using self.emit_x_axis() as shown
-        # above. Or emit it at every grab filling it the x_axis key of DataFromPlugins, not shown here)
 
         ##asynchrone version (non-blocking function with callback)
         self.controller.your_method_to_start_a_grab_snap(self.callback)

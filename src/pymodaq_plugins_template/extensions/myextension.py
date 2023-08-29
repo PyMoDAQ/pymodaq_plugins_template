@@ -11,6 +11,9 @@ from pymodaq.utils.plotting.data_viewers.viewer2D import Viewer2D
 config = utils.load_config()
 logger = utils.set_logger(utils.get_module_name(__file__))
 
+EXTENSION_NAME = 'MY_EXTENSION_NAME'
+CLASS_NAME = 'MyExtension'
+
 
 class MyExtension(gutils.CustomApp):
     # list of dicts enabling the settings tree on the user interface

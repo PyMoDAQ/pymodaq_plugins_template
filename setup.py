@@ -11,7 +11,11 @@ from pathlib import Path
 if not SHORT_PLUGIN_NAME.isidentifier():
     raise ValueError("'SHORT_PLUGIN_NAME = %s' is not a valid python identifier." % SHORT_PLUGIN_NAME)
 
-with open(str(Path(__file__).parent.joinpath(f'src/{PLUGIN_NAME}/VERSION')), 'r') as fvers:
+version_file = Path(__file__).parent.joinpath(f'src/{PLUGIN_NAME}/resources/VERSION')  # new location of the version file
+if not version_file.is_file():
+    version_file = Path(__file__).parent.joinpath(f'src/{PLUGIN_NAME}/VERSION')
+
+with open(str(version_file), 'r') as fvers:
     version = fvers.read().strip()
 
 

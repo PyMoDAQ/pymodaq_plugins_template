@@ -1,4 +1,5 @@
-from pymodaq.control_modules.move_utility_classes import DAQ_Move_base, comon_parameters_fun, main  # common set of parameters for all actuators
+from pymodaq.control_modules.move_utility_classes import DAQ_Move_base, comon_parameters_fun, main, DataActuatorType,\
+    DataActuator  # common set of parameters for all actuators
 from pymodaq.utils.daq_utils import ThreadCommand # object used to send info back to the main thread
 from pymodaq.utils.parameter import Parameter
 
@@ -26,6 +27,8 @@ class DAQ_Move_Template(DAQ_Move_base):
     is_multiaxes = False  # TODO for your plugin set to True if this plugin is controlled for a multiaxis controller
     axes_names = ['Axis1', 'Axis2']  # TODO for your plugin: complete the list
     _epsilon = 0.1  # TODO replace this by a value that is correct depending on your controller
+    data_actuator_type = DataActuatorType['DataActuator']  # wether you use the new data style for actuator otherwise set this
+    # as  DataActuatorType['float']  (or entirely remove the line)
 
     params = [   # TODO for your custom plugin: elements to be added here as dicts in order to control your custom stage
                 ] + comon_parameters_fun(is_multiaxes, axes_names, epsilon=_epsilon)
@@ -49,7 +52,7 @@ class DAQ_Move_Template(DAQ_Move_base):
         """
         ## TODO for your custom plugin
         raise NotImplemented  # when writing your own plugin remove this line
-        pos = self.controller.your_method_to_get_the_actuator_value()  # when writing your own plugin replace this line
+        pos = DataActuator(data=self.controller.your_method_to_get_the_actuator_value())  # when writing your own plugin replace this line
         pos = self.get_position_with_scaling(pos)
         return pos
 
@@ -96,7 +99,7 @@ class DAQ_Move_Template(DAQ_Move_base):
         initialized = self.controller.a_method_or_atttribute_to_check_if_init()  # todo
         return info, initialized
 
-    def move_abs(self, value):
+    def move_abs(self, value: DataActuator):
         """ Move the actuator to the absolute target defined by value
 
         Parameters
@@ -109,11 +112,10 @@ class DAQ_Move_Template(DAQ_Move_base):
         value = self.set_position_with_scaling(value)  # apply scaling if the user specified one
         ## TODO for your custom plugin
         raise NotImplemented  # when writing your own plugin remove this line
-        self.controller.your_method_to_set_an_absolute_value(value)  # when writing your own plugin replace this line
+        self.controller.your_method_to_set_an_absolute_value(value.value())  # when writing your own plugin replace this line
         self.emit_status(ThreadCommand('Update_Status', ['Some info you want to log']))
 
-
-    def move_rel(self, value):
+    def move_rel(self, value: DataActuator):
         """ Move the actuator to the relative target actuator value defined by value
 
         Parameters
@@ -126,9 +128,8 @@ class DAQ_Move_Template(DAQ_Move_base):
 
         ## TODO for your custom plugin
         raise NotImplemented  # when writing your own plugin remove this line
-        self.controller.your_method_to_set_a_relative_value(value)  # when writing your own plugin replace this line
+        self.controller.your_method_to_set_a_relative_value(value.value())  # when writing your own plugin replace this line
         self.emit_status(ThreadCommand('Update_Status', ['Some info you want to log']))
-
 
     def move_home(self):
         """Call the reference method of the controller"""
@@ -137,7 +138,6 @@ class DAQ_Move_Template(DAQ_Move_base):
         raise NotImplemented  # when writing your own plugin remove this line
         self.controller.your_method_to_get_to_a_known_reference()  # when writing your own plugin replace this line
         self.emit_status(ThreadCommand('Update_Status', ['Some info you want to log']))
-
 
     def stop_motion(self):
       """Stop the actuator and emits move_done signal"""

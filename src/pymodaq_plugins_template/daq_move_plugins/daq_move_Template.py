@@ -8,7 +8,7 @@ class PythonWrapperOfYourInstrument:
     #  TODO Replace this fake class with the import of the real python wrapper of your instrument
     pass
 
-
+# TODO change the name of the class to DAQ_Move_YourName
 class DAQ_Move_Template(DAQ_Move_base):
     """Plugin for the Template Instrument
 

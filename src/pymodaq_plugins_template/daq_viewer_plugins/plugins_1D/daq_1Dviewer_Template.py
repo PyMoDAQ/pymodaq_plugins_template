@@ -9,7 +9,7 @@ class PythonWrapperOfYourInstrument:
     #  TODO Replace this fake class with the import of the real python wrapper of your instrument
     pass
 
-
+# TODO change the name of the class to DAQ_1DViewer_YourName
 class DAQ_1DViewer_Template(DAQ_Viewer_base):
     """
     """

@@ -14,7 +14,7 @@ class PythonWrapperOfYourInstrument:
 # (2) change the name of this file to daq_1Dviewer_TheNameOfYourChoice ("TheNameOfYourChoice" should be the SAME
 #     for the class name and the file name.
 # (3) this file should then be put into the right folder, namely IN THE FOLDER OF THE PLUGIN YOU ARE DEVELOPING:
-      pymodaq_plugins_my_plugin/daq_viewer_plugins/plugins_1D
+#     pymodaq_plugins_my_plugin/daq_viewer_plugins/plugins_1D
 class DAQ_1DViewer_Template(DAQ_Viewer_base):
     """
     """

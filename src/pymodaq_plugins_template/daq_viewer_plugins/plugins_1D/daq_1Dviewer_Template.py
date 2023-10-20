@@ -96,7 +96,7 @@ class DAQ_1DViewer_Template(DAQ_Viewer_base):
         kwargs: dict
             others optionals arguments
         """
-        ## TODO for your custom plugin
+        ## TODO for your custom plugin: you should choose EITHER the synchrone or the asynchrone version following
 
         ##synchrone version (blocking function)
         data_tot = self.controller.your_method_to_start_a_grab_snap()

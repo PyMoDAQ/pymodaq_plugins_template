@@ -87,7 +87,7 @@ class DAQ_0DViewer_Template(DAQ_Viewer_base):
         kwargs: dict
             others optionals arguments
         """
-        ## TODO for your custom plugin
+        ## TODO for your custom plugin: you should choose EITHER the synchrone or the asynchrone version following
 
         # synchrone version (blocking function)
         raise NotImplemented  # when writing your own plugin remove this line

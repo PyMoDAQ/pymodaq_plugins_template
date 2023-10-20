@@ -9,7 +9,12 @@ class PythonWrapperOfYourInstrument:
     #  TODO Replace this fake class with the import of the real python wrapper of your instrument
     pass
 
-
+# TODO:
+# (1) change the name of the following class to DAQ_1DViewer_TheNameOfYourChoice
+# (2) change the name of this file to daq_1Dviewer_TheNameOfYourChoice ("TheNameOfYourChoice" should be the SAME
+#     for the class name and the file name.)
+# (3) this file should then be put into the right folder, namely IN THE FOLDER OF THE PLUGIN YOU ARE DEVELOPING:
+#     pymodaq_plugins_my_plugin/daq_viewer_plugins/plugins_1D
 class DAQ_1DViewer_Template(DAQ_Viewer_base):
     """
     """
@@ -96,13 +101,14 @@ class DAQ_1DViewer_Template(DAQ_Viewer_base):
         kwargs: dict
             others optionals arguments
         """
-        ## TODO for your custom plugin
+        ## TODO for your custom plugin: you should choose EITHER the synchrone or the asynchrone version following
 
         ##synchrone version (blocking function)
         data_tot = self.controller.your_method_to_start_a_grab_snap()
         self.dte_signal.emit(DataToExport('myplugin',
                                           data=[DataFromPlugins(name='Mock1', data=data_tot,
-                                                                dim='Data1D', labels=['dat0', 'data1'])]))
+                                                                dim='Data1D', labels=['dat0', 'data1'],
+                                                                axes=[self.x_axis])]))
 
         ##asynchrone version (non-blocking function with callback)
         self.controller.your_method_to_start_a_grab_snap(self.callback)

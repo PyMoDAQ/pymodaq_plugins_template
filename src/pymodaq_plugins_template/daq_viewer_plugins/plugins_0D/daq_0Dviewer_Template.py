@@ -9,7 +9,12 @@ class PythonWrapperOfYourInstrument:
     #  TODO Replace this fake class with the import of the real python wrapper of your instrument
     pass
 
-
+# TODO:
+# (1) change the name of the following class to DAQ_0DViewer_TheNameOfYourChoice
+# (2) change the name of this file to daq_0Dviewer_TheNameOfYourChoice ("TheNameOfYourChoice" should be the SAME
+#     for the class name and the file name.)
+# (3) this file should then be put into the right folder, namely IN THE FOLDER OF THE PLUGIN YOU ARE DEVELOPING:
+#     pymodaq_plugins_my_plugin/daq_viewer_plugins/plugins_0D
 class DAQ_0DViewer_Template(DAQ_Viewer_base):
     """
     """
@@ -61,10 +66,10 @@ class DAQ_0DViewer_Template(DAQ_Viewer_base):
 
         # TODO for your custom plugin (optional) initialize viewers panel with the future type of data
         self.dte_signal_temp.emit(DataToExport(name='myplugin',
-                                               data=DataFromPlugins(name='Mock1',
+                                               data=[DataFromPlugins(name='Mock1',
                                                                     data=[np.array([0]), np.array([0])],
                                                                     dim='Data0D',
-                                                                    labels=['Mock1', 'label2'])))
+                                                                    labels=['Mock1', 'label2'])]))
 
         info = "Whatever info you want to log"
         initialized = self.controller.a_method_or_atttribute_to_check_if_init()  # TODO
@@ -87,7 +92,7 @@ class DAQ_0DViewer_Template(DAQ_Viewer_base):
         kwargs: dict
             others optionals arguments
         """
-        ## TODO for your custom plugin
+        ## TODO for your custom plugin: you should choose EITHER the synchrone or the asynchrone version following
 
         # synchrone version (blocking function)
         raise NotImplemented  # when writing your own plugin remove this line

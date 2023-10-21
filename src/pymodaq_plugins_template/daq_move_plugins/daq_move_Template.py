@@ -8,7 +8,12 @@ class PythonWrapperOfYourInstrument:
     #  TODO Replace this fake class with the import of the real python wrapper of your instrument
     pass
 
-# TODO change the name of the class to DAQ_Move_YourName
+# TODO:
+# (1) change the name of the following class to DAQ_Move_TheNameOfYourChoice
+# (2) change the name of this file to daq_move_TheNameOfYourChoice ("TheNameOfYourChoice" should be the SAME
+#     for the class name and the file name.)
+# (3) this file should then be put into the right folder, namely IN THE FOLDER OF THE PLUGIN YOU ARE DEVELOPING:
+#     pymodaq_plugins_my_plugin/daq_move_plugins
 class DAQ_Move_Template(DAQ_Move_base):
     """Plugin for the Template Instrument
 

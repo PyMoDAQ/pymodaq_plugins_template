@@ -15,23 +15,24 @@ class PythonWrapperOfYourInstrument:
 # (3) this file should then be put into the right folder, namely IN THE FOLDER OF THE PLUGIN YOU ARE DEVELOPING:
 #     pymodaq_plugins_my_plugin/daq_move_plugins
 class DAQ_Move_Template(DAQ_Move_base):
-    """Plugin for the Template Instrument
+    """ Instrument plugin class for an actuator.
+    
+    This object inherits all functionalities to communicate with PyMoDAQ’s DAQ_Move module through inheritance via
+    DAQ_Move_base. It makes a bridge between the DAQ_Move module and the Python wrapper of a particular instrument.
 
-    This object inherits all functionality to communicate with PyMoDAQ Module through inheritance via DAQ_Move_base
-    It then implements the particular communication with the instrument
-
-    # TODO Complete the docstring of your plugin with:
-    #     * The set of controllers and actuators that should be compatible with this instrument plugin.
-    #     * With which instrument and controller it has been tested.
-    #     * The version of PyMoDAQ during the test.
-    #     * The version of the operating system.
-    #     * Installation instructions: what manufacturer’s drivers should be installed to make it run?
+    TODO Complete the docstring of your plugin with:
+        * The set of controllers and actuators that should be compatible with this instrument plugin.
+        * With which instrument and controller it has been tested.
+        * The version of PyMoDAQ during the test.
+        * The version of the operating system.
+        * Installation instructions: what manufacturer’s drivers should be installed to make it run?
 
     Attributes:
     -----------
     controller: object
         The particular object that allow the communication with the hardware, in general a python wrapper around the
-         hardware library
+         hardware library.
+         
     # TODO add your particular attributes here if any
 
     """

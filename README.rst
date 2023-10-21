@@ -1,5 +1,5 @@
-pymodaq_plugins_template (??? Instruments)
-##########################################
+pymodaq_plugins_template
+########################
 
 .. the following must be adapted to your developed package, links to pypi, github  description...
 
@@ -19,7 +19,7 @@ pymodaq_plugins_template (??? Instruments)
     :target: https://github.com/PyMoDAQ/pymodaq_plugins_template/actions/workflows/Test.yml
 
 
-Set of PyMoDAQ plugins for instruments from ???
+Use this template and create a repository on your account to start the development of your own PyMoDAQ plugin!
 
 
 Authors
@@ -80,7 +80,9 @@ Extensions
 ==========
 
 
-Infos
-=====
+Installation instructions
+=========================
 
-if needed for installation or other infos
+* PyMoDAQ’s version.
+* Operating system’s version.
+* What manufacturer’s drivers should be installed to make this plugin run?

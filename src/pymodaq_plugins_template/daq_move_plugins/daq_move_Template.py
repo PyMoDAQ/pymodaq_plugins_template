@@ -20,6 +20,13 @@ class DAQ_Move_Template(DAQ_Move_base):
     This object inherits all functionality to communicate with PyMoDAQ Module through inheritance via DAQ_Move_base
     It then implements the particular communication with the instrument
 
+    # TODO Complete the docstring of your plugin with:
+    #     * The set of controllers and actuators that should be compatible with this instrument plugin.
+    #     * With which instrument and controller it has been tested.
+    #     * The version of PyMoDAQ during the test.
+    #     * The version of the operating system.
+    #     * Installation instructions: what manufacturer’s drivers should be installed to make it run?
+
     Attributes:
     -----------
     controller: object

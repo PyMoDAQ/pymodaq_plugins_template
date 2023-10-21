@@ -15,7 +15,26 @@ class PythonWrapperOfYourInstrument:
 # (3) this file should then be put into the right folder, namely IN THE FOLDER OF THE PLUGIN YOU ARE DEVELOPING:
 #     pymodaq_plugins_my_plugin/daq_viewer_plugins/plugins_2D
 class DAQ_2DViewer_Template(DAQ_Viewer_base):
-    """
+    """ Instrument plugin class for a 2D viewer.
+    
+    This object inherits all functionalities to communicate with PyMoDAQ’s DAQ_Viewer module through inheritance via
+    DAQ_Viewer_base. It makes a bridge between the DAQ_Viewer module and the Python wrapper of a particular instrument.
+
+    TODO Complete the docstring of your plugin with:
+        * The set of instruments that should be compatible with this instrument plugin.
+        * With which instrument it has actually been tested.
+        * The version of PyMoDAQ during the test.
+        * The version of the operating system.
+        * Installation instructions: what manufacturer’s drivers should be installed to make it run?
+
+    Attributes:
+    -----------
+    controller: object
+        The particular object that allow the communication with the hardware, in general a python wrapper around the
+         hardware library.
+         
+    # TODO add your particular attributes here if any
+
     """
     params = comon_parameters + [
         ## TODO for your custom plugin

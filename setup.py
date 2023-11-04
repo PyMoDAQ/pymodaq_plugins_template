@@ -43,15 +43,30 @@ setupOpts = dict(
         "Topic :: Software Development :: User Interfaces",
     ], )
 
+#instrument
+#extension = false  # true if plugins contains dashboard extensions
+#pid_models = false  # true if plugins contains pid models
+#h5exporters = false  # true if plugin contains custom h5 file exporters
+#scans
+
+entrypoints = {}
+if config['features']['instrument']:
+    entrypoints['pymodaq.instrument'] = f'{SHORT_PLUGIN_NAME} = {PLUGIN_NAME}'
+if config['features']['extension']:
+    entrypoints['pymodaq.extension'] = f'{SHORT_PLUGIN_NAME} = {PLUGIN_NAME}'
+if config['features']['pid_models']:
+    entrypoints['pymodaq.pid_models'] = f'{SHORT_PLUGIN_NAME} = {PLUGIN_NAME}'
+if config['features']['h5exporters']:
+    entrypoints['pymodaq.h5exporters'] = f'{SHORT_PLUGIN_NAME} = {PLUGIN_NAME}'
+if config['features']['scans']:
+    entrypoints['pymodaq.scans'] = f'{SHORT_PLUGIN_NAME} = {PLUGIN_NAME}'
 
 setup(
     version=version,
     packages=find_packages(where='./src'),
     package_dir={'': 'src'},
     include_package_data=True,
-    entry_points={'pymodaq.plugins': f'{SHORT_PLUGIN_NAME} = {PLUGIN_NAME}',
-                  'pymodaq.pid_models': f"{SHORT_PLUGIN_NAME} = {PLUGIN_NAME}",
-                  'pymodaq.extensions': f"{SHORT_PLUGIN_NAME} = {PLUGIN_NAME}"},
+    entry_points=entrypoints,
     install_requires=['toml', ]+config['plugin-install']['packages-required'],
     **setupOpts
 )

@@ -51,10 +51,10 @@ setupOpts = dict(
 
 entrypoints = {}
 if 'features' in config:
-    if config['features'].get('instrument', False):
-        entrypoints['pymodaq.instrument'] = f'{SHORT_PLUGIN_NAME} = {PLUGIN_NAME}'
-    if config['features'].get('extension', False):
-        entrypoints['pymodaq.extension'] = f'{SHORT_PLUGIN_NAME} = {PLUGIN_NAME}'
+    if config['features'].get('instruments', False):
+        entrypoints['pymodaq.instruments'] = f'{SHORT_PLUGIN_NAME} = {PLUGIN_NAME}'
+    if config['features'].get('extensions', False):
+        entrypoints['pymodaq.extensions'] = f'{SHORT_PLUGIN_NAME} = {PLUGIN_NAME}'
     if config['features'].get('pid_models', False):
         entrypoints['pymodaq.pid_models'] = f'{SHORT_PLUGIN_NAME} = {PLUGIN_NAME}'
     if config['features'].get('h5exporters', False):
@@ -62,7 +62,7 @@ if 'features' in config:
     if config['features'].get('scans', False):
         entrypoints['pymodaq.scans'] = f'{SHORT_PLUGIN_NAME} = {PLUGIN_NAME}'
 else:
-    entrypoints['pymodaq.instrument'] = f'{SHORT_PLUGIN_NAME} = {PLUGIN_NAME}'
+    entrypoints['pymodaq.instruments'] = f'{SHORT_PLUGIN_NAME} = {PLUGIN_NAME}'
 
 setup(
     version=version,

@@ -1,4 +1,4 @@
-## To modify by developper(s) of the plugin
+## To modify by developer(s) of the plugin
 
 [plugin-info]
 SHORT_PLUGIN_NAME = 'template'  #to be modified, for instance daqmx then rename the module name:

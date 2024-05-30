@@ -21,24 +21,30 @@ def get_package_name():
     package_name = here.parent.stem
     return package_name
 
-
 def get_move_plugins():
     pkg_name = get_package_name()
-    move_mod = importlib.import_module(f'{pkg_name}.daq_move_plugins')
-
-    plugin_list = [mod for mod in [mod[1] for mod in
-                                   pkgutil.iter_modules([str(move_mod.path.parent)])]
-                   if 'daq_move_' in mod]
+    try:
+        move_mod = importlib.import_module(f'{pkg_name}.daq_move_plugins')
+        plugin_list = [mod for mod in [mod[1] for mod in
+                                       pkgutil.iter_modules([str(move_mod.path.parent)])]
+                       if 'daq_move_' in mod]
+    except ModuleNotFoundError:
+        plugin_list = []
+        move_mod = None
     return plugin_list, move_mod
 
 
 def get_viewer_plugins(dim='0D'):
     pkg_name = get_package_name()
-    viewer_mod = importlib.import_module(f'{pkg_name}.daq_viewer_plugins.plugins_{dim}')
+    try:
+        viewer_mod = importlib.import_module(f'{pkg_name}.daq_viewer_plugins.plugins_{dim}')
 
-    plugin_list = [mod for mod in [mod[1] for mod in
-                                   pkgutil.iter_modules([str(viewer_mod.path.parent)])]
-                   if f'daq_{dim}viewer_' in mod]
+        plugin_list = [mod for mod in [mod[1] for mod in
+                                       pkgutil.iter_modules([str(viewer_mod.path.parent)])]
+                       if f'daq_{dim}viewer_' in mod]
+    except ModuleNotFoundError:
+        plugin_list = []
+        viewer_mod = None
     return plugin_list, viewer_mod
 
 

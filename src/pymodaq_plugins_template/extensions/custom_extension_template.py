@@ -1,7 +1,7 @@
 from qtpy import QtWidgets
 
 from pymodaq.utils import gui_utils as gutils
-from pymodaq.utils.config import Config
+from pymodaq.utils.config import Config, get_set_preset_path
 from pymodaq.utils.logger import set_logger, get_module_name
 
 # todo: replace here *pymodaq_plugins_template* by your plugin package name
@@ -12,18 +12,26 @@ logger = set_logger(get_module_name(__file__))
 main_config = Config()
 plugin_config = PluginConfig()
 
+# todo: modify this as you wish
+EXTENSION_NAME = 'MY_EXTENSION_NAME'  # the name that will be displayed in the extension list in the
+# dashboard
+CLASS_NAME = 'CustomExtensionTemplate'  # this should be the name of your class defined below
+
 
 # todo: modify the name of this class to reflect its application and change the name in the main
 # method at the end of the script
-class CustomAppTemplate(gutils.CustomApp):
+class CustomExtensionTemplate(gutils.CustomApp):
 
     # todo: if you wish to create custom Parameter and corresponding widgets. These will be
     # automatically added as children of self.settings. Morevover, the self.settings_tree will
     # render the widgets in a Qtree. If you wish to see it in your app, add is into a Dock
     params = []
 
-    def __init__(self, parent: gutils.DockArea):
-        super().__init__(parent)
+    def __init__(self, parent: gutils.DockArea, dashboard):
+        super().__init__(parent, dashboard)
+
+        # info: in an extension, if you want to interact with ControlModules you have to use the
+        # object: self.modules_manager which is a ModulesManager instance from the dashboard
 
         self.setup_ui()
 
@@ -107,16 +115,13 @@ class CustomAppTemplate(gutils.CustomApp):
 
 def main():
     from pymodaq.utils.gui_utils.utils import mkQApp
-    app = mkQApp('CustomApp')
+    from pymodaq.utils.gui_utils.loader_utils import load_dashboard_with_preset
 
-    mainwindow = QtWidgets.QMainWindow()
-    dockarea = gutils.DockArea()
-    mainwindow.setCentralWidget(dockarea)
 
-    # todo: change the name here to be the same as your app class
-    prog = CustomAppTemplate(dockarea)
+    app = mkQApp(EXTENSION_NAME)
+    preset_file_name = plugin_config('presets', f'preset_for_{EXTENSION_NAME}')
 
-    mainwindow.show()
+    load_dashboard_with_preset(preset_file_name, EXTENSION_NAME)
 
     app.exec()
 

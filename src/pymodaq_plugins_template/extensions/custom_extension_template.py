@@ -120,15 +120,15 @@ def main():
 
     app = mkQApp(EXTENSION_NAME)
     try:
-        preset_file_name = plugin_config('presets', f'preset_for_{EXTENSION_NAME}')
+        preset_file_name = plugin_config('presets', f'preset_for_{CLASS_NAME.lower()}')
         load_dashboard_with_preset(preset_file_name, EXTENSION_NAME)
         app.exec()
 
     except ConfigError as e:
-        messagebox(f'No entry with name f"preset_for_{EXTENSION_NAME}" has been configured'
+        messagebox(f'No entry with name f"preset_for_{CLASS_NAME.lower()}" has been configured'
                    f'in the plugin config file. The toml entry should be:\n'
                    f'[presets]'
-                   f"preset_for_{EXTENSION_NAME} = {'a name for an existing preset'}"
+                   f"preset_for_{CLASS_NAME.lower()} = {'a name for an existing preset'}"
                    )
 
 if __name__ == '__main__':

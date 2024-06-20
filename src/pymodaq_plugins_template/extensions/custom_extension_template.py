@@ -1,7 +1,7 @@
 from qtpy import QtWidgets
 
 from pymodaq.utils import gui_utils as gutils
-from pymodaq.utils.config import Config, get_set_preset_path
+from pymodaq.utils.config import Config, get_set_preset_path, ConfigError
 from pymodaq.utils.logger import set_logger, get_module_name
 
 # todo: replace here *pymodaq_plugins_template* by your plugin package name
@@ -116,15 +116,20 @@ class CustomExtensionTemplate(gutils.CustomApp):
 def main():
     from pymodaq.utils.gui_utils.utils import mkQApp
     from pymodaq.utils.gui_utils.loader_utils import load_dashboard_with_preset
-
+    from pymodaq.utils.messenger import messagebox
 
     app = mkQApp(EXTENSION_NAME)
-    preset_file_name = plugin_config('presets', f'preset_for_{EXTENSION_NAME}')
+    try:
+        preset_file_name = plugin_config('presets', f'preset_for_{EXTENSION_NAME}')
+        load_dashboard_with_preset(preset_file_name, EXTENSION_NAME)
+        app.exec()
 
-    load_dashboard_with_preset(preset_file_name, EXTENSION_NAME)
-
-    app.exec()
-
+    except ConfigError as e:
+        messagebox(f'No entry with name f"preset_for_{EXTENSION_NAME}" has been configured'
+                   f'in the plugin config file. The toml entry should be:\n'
+                   f'[presets]'
+                   f"preset_for_{EXTENSION_NAME} = {'a name for an existing preset'}"
+                   )
 
 if __name__ == '__main__':
     main()

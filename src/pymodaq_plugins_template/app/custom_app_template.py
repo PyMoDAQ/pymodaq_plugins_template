@@ -2,12 +2,20 @@ from qtpy import QtWidgets
 
 from pymodaq.utils import gui_utils as gutils
 
+# todo: replace here *pymodaq_plugins_template* by your plugin package name
+from pymodaq_plugins_template.utils import Config as PluginConfig
 
-#todo: modify the name of this class to reflect its application and chnage the name in the main
+logger = set_logger(get_module_name(__file__))
+
+main_config = Config()
+plugin_config = PluginConfig()
+
+
+# todo: modify the name of this class to reflect its application and change the name in the main
 # method at the end of the script
 class CustomAppTemplate(gutils.CustomApp):
 
-    #todo: if you wish to create custom Parameter and corresponding widgets. These will be
+    # todo: if you wish to create custom Parameter and corresponding widgets. These will be
     # automatically added as children of self.settings. Morevover, the self.settings_tree will
     # render the widgets in a Qtree. If you wish to see it in your app, add is into a Dock
     params = []
@@ -31,7 +39,7 @@ class CustomAppTemplate(gutils.CustomApp):
         --------
         pyqtgraph.dockarea.Dock
         """
-        #todo: create docks and add them here to hold your widgets
+        # todo: create docks and add them here to hold your widgets
         # reminder, the attribute self.settings_tree will  render the widgets in a Qtree.
         # If you wish to see it in your app, add is into a Dock
         raise NotImplementedError
@@ -75,7 +83,7 @@ class CustomAppTemplate(gutils.CustomApp):
         --------
         pymodaq.utils.managers.action_manager.ActionManager
         """
-        #todo create and populate menu using actions defined above in self.setup_actions
+        # todo create and populate menu using actions defined above in self.setup_actions
         pass
 
     def value_changed(self, param):
@@ -103,7 +111,7 @@ def main():
     dockarea = gutils.DockArea()
     mainwindow.setCentralWidget(dockarea)
 
-    #todo: change the name here to be the same as your app class
+    # todo: change the name here to be the same as your app class
     prog = CustomAppTemplate(dockarea)
 
     mainwindow.show()

@@ -51,11 +51,11 @@ class CustomAppTemplate(gutils.CustomApp):
 
         Examples
         --------
-        >>> self.add_action('Quit', 'close2', "Quit program")
-        >>> self.add_action('Grab', 'camera', "Grab from camera", checkable=True)
-        >>> self.add_action('Load', 'Open', "Load target file (.h5, .png, .jpg) or data from camera"
+        >>> self.add_action('quit', 'Quit', 'close2', "Quit program")
+        >>> self.add_action('grab', 'Grab', 'camera', "Grab from camera", checkable=True)
+        >>> self.add_action('load', 'Load', 'Open', "Load target file (.h5, .png, .jpg) or data from camera"
             , checkable=False)
-        >>> self.add_action('Save', 'SaveAs', "Save current data", checkable=False)
+        >>> self.add_action('save', 'Save', 'SaveAs', "Save current data", checkable=False)
 
         See Also
         --------

@@ -1,8 +1,8 @@
 from qtpy import QtWidgets
 
-from pymodaq.utils import gui_utils as gutils
-from pymodaq.utils.config import Config
-from pymodaq.utils.logger import set_logger, get_module_name
+from pymodaq_gui import utils as gutils
+from pymodaq_utils.config import Config
+from pymodaq_utils.logger import set_logger, get_module_name
 
 # todo: replace here *pymodaq_plugins_template* by your plugin package name
 from pymodaq_plugins_template.utils import Config as PluginConfig

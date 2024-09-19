@@ -1,8 +1,12 @@
 from qtpy import QtWidgets
 
-from pymodaq.utils import gui_utils as gutils
-from pymodaq.utils.config import Config, get_set_preset_path, ConfigError
-from pymodaq.utils.logger import set_logger, get_module_name
+from pymodaq_gui import utils as gutils
+from pymodaq_utils.config import Config, ConfigError
+from pymodaq_utils.logger import set_logger, get_module_name
+
+from pymodaq.utils.config import get_set_preset_path
+from pymodaq.extensions.utils import CustomExt
+
 
 # todo: replace here *pymodaq_plugins_template* by your plugin package name
 from pymodaq_plugins_template.utils import Config as PluginConfig
@@ -20,7 +24,7 @@ CLASS_NAME = 'CustomExtensionTemplate'  # this should be the name of your class 
 
 # todo: modify the name of this class to reflect its application and change the name in the main
 # method at the end of the script
-class CustomExtensionTemplate(gutils.CustomApp):
+class CustomExtensionTemplate(CustomExt):
 
     # todo: if you wish to create custom Parameter and corresponding widgets. These will be
     # automatically added as children of self.settings. Morevover, the self.settings_tree will
@@ -130,6 +134,7 @@ def main():
                    f'[presets]'
                    f"preset_for_{CLASS_NAME.lower()} = {'a name for an existing preset'}"
                    )
+
 
 if __name__ == '__main__':
     main()

@@ -1,7 +1,8 @@
-from pymodaq.control_modules.move_utility_classes import DAQ_Move_base, comon_parameters_fun, main, DataActuatorType,\
-    DataActuator  # common set of parameters for all actuators
-from pymodaq.utils.daq_utils import ThreadCommand # object used to send info back to the main thread
-from pymodaq.utils.parameter import Parameter
+from pymodaq.control_modules.move_utility_classes import (DAQ_Move_base, comon_parameters_fun,
+                                                          main, DataActuatorType, DataActuator)
+
+from pymodaq_utils.utils import ThreadCommand  # object used to send info back to the main thread
+from pymodaq_gui.parameter import Parameter
 
 
 class PythonWrapperOfYourInstrument:
@@ -40,7 +41,7 @@ class DAQ_Move_Template(DAQ_Move_base):
     is_multiaxes = False  # TODO for your plugin set to True if this plugin is controlled for a multiaxis controller
     _axis_names = ['Axis1', 'Axis2']  # TODO for your plugin: complete the list
     _epsilon = 0.1  # TODO replace this by a value that is correct depending on your controller
-    data_actuator_type = DataActuatorType['DataActuator']  # wether you use the new data style for actuator otherwise set this
+    data_actuator_type = DataActuatorType.DataActuator  # wether you use the new data style for actuator otherwise set this
     # as  DataActuatorType['float']  (or entirely remove the line)
 
     params = [   # TODO for your custom plugin: elements to be added here as dicts in order to control your custom stage

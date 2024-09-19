@@ -1,5 +1,10 @@
-from pymodaq.extensions.pid.utils import PIDModelGeneric, OutputToActuator, InputFromDetector, main
-from pymodaq.utils.data import DataToExport
+import numpy as np
+
+from pymodaq.extensions.pid.utils import PIDModelGeneric, DataToActuatorPID, main
+from pymodaq_data.data import DataToExport, DataCalculated
+
+from pymodaq.utils.data import DataActuator
+
 from typing import List
 
 
@@ -62,9 +67,12 @@ class PIDModelTemplate(PIDModelGeneric):
         """
 
         x, y = some_function_to_convert_the_data(measurements)
-        return InputFromDetector([y, x])
+        return DataToExport('pid inputs',
+                            data=[DataCalculated('pid calculated',
+                                                 data=[np.array([x]),
+                                                       np.array([y])])])
 
-    def convert_output(self, outputs: List[float], dt: float, stab=True):
+    def convert_output(self, outputs: List[float], dt: float, stab=True) -> DataToActuatorPID:
         """
         Convert the output of the PID in units to be fed into the actuator
         Parameters
@@ -81,7 +89,9 @@ class PIDModelTemplate(PIDModelGeneric):
 
         """
         outputs = some_function_to_convert_the_pid_outputs(outputs, dt, stab)
-        return OutputToActuator(mode='rel', values=outputs)
+        return DataToActuatorPID('pid output', mode='rel',
+                                 data=[DataActuator(self.actuators_name[ind], data=outputs[ind])
+                                       for ind in range(len(outputs))])
 
 
 if __name__ == '__main__':

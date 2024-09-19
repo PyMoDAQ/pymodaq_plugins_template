@@ -1,9 +1,11 @@
 import numpy as np
-from pymodaq.utils.daq_utils import ThreadCommand
-from pymodaq.utils.data import DataFromPlugins, DataToExport
-from pymodaq.control_modules.viewer_utility_classes import DAQ_Viewer_base, comon_parameters, main
-from pymodaq.utils.parameter import Parameter
 
+from pymodaq_utils.utils import ThreadCommand
+from pymodaq_data.data import DataToExport
+from pymodaq_gui.parameter import Parameter
+
+from pymodaq.control_modules.viewer_utility_classes import DAQ_Viewer_base, comon_parameters, main
+from pymodaq.utils.data import DataFromPlugins
 
 class PythonWrapperOfYourInstrument:
     #  TODO Replace this fake class with the import of the real python wrapper of your instrument
@@ -15,6 +17,7 @@ class PythonWrapperOfYourInstrument:
 #     for the class name and the file name.)
 # (3) this file should then be put into the right folder, namely IN THE FOLDER OF THE PLUGIN YOU ARE DEVELOPING:
 #     pymodaq_plugins_my_plugin/daq_viewer_plugins/plugins_0D
+
 class DAQ_0DViewer_Template(DAQ_Viewer_base):
     """ Instrument plugin class for a OD viewer.
     

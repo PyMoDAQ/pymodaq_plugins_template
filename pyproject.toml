@@ -33,6 +33,9 @@ classifiers = [
 source = "vcs"
 fallback-version = '0.0.1'
 
+[tool.hatch.build.hooks.vcs]
+version-file = "_version.py"
+
 [tool.hatch.build.targets.sdist]
 include = [
     "/src",

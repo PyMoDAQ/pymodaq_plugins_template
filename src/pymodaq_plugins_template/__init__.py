@@ -1,8 +1,8 @@
 from pathlib import Path
 from pymodaq_utils.logger import set_logger  # to be imported by other modules.
+from _version import __version__, __version_tuple__, version_tuple, version
 
 from .utils import Config
 config = Config()
 
-with open(str(Path(__file__).parent.joinpath('resources/VERSION')), 'r') as fvers:
-    __version__ = fvers.read().strip()
+

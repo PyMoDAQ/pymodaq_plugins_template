@@ -17,21 +17,22 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
-        python-version: '3.11'
+        python-version: '3.x'
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install setuptools wheel twine toml "pymodaq>=4.1.0" pyqt5
-
-    - name: create local pymodaq folder and setting permissions
+        pip install hatch hatchling toml
+    - name: Get history and tags for SCM versioning to work
       run: |
-        sudo mkdir /etc/.pymodaq
-        sudo chmod uo+rw /etc/.pymodaq
-        
-    - name: Build and publish
+        git branch
+        git fetch --prune --unshallow
+        git fetch --depth=1 origin +refs/tags/*:refs/tags/*
+        hatch version
+    - name: Build
+      run: hatch build
+    - name: publish
       env:
-        TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
-        TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
+        HATCH_INDEX_USER: ${{ secrets.PYPI_USERNAME }}
+        HATCH_INDEX_AUTH: ${{ secrets.PYPI_PASSWORD }}
       run: |
-        python setup.py sdist bdist_wheel
-        twine upload dist/*
+        hatch publish

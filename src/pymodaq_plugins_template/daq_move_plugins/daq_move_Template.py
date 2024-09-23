@@ -1,3 +1,5 @@
+
+from typing import Union, List, Dict
 from pymodaq.control_modules.move_utility_classes import (DAQ_Move_base, comon_parameters_fun,
                                                           main, DataActuatorType, DataActuator)
 
@@ -37,12 +39,14 @@ class DAQ_Move_Template(DAQ_Move_base):
     # TODO add your particular attributes here if any
 
     """
-    _controller_units = 'whatever'  # TODO for your plugin: put the correct unit here
     is_multiaxes = False  # TODO for your plugin set to True if this plugin is controlled for a multiaxis controller
-    _axis_names = ['Axis1', 'Axis2']  # TODO for your plugin: complete the list
-    _epsilon = 0.1  # TODO replace this by a value that is correct depending on your controller
+    _axis_names: Union[List[str], Dict[str, int]] = ['Axis1', 'Axis2']  # TODO for your plugin: complete the list
+    _controller_units: Union[str, List[str]] = 'mm'  # TODO for your plugin: put the correct unit here, it could be
+    # TODO  a single str (the same one is applied to all axes) or a list of str (as much as the number of axes)
+    _epsilon: Union[float, List[float]] = 0.1  # TODO replace this by a value that is correct depending on your controller
+    # TODO it could be a single float of a list of float (as much as the number of axes)
     data_actuator_type = DataActuatorType.DataActuator  # wether you use the new data style for actuator otherwise set this
-    # as  DataActuatorType['float']  (or entirely remove the line)
+    # as  DataActuatorType.float  (or entirely remove the line)
 
     params = [   # TODO for your custom plugin: elements to be added here as dicts in order to control your custom stage
                 ] + comon_parameters_fun(is_multiaxes, axis_names=_axis_names, epsilon=_epsilon)
@@ -85,7 +89,13 @@ class DAQ_Move_Template(DAQ_Move_base):
             A given parameter (within detector_settings) whose value has been changed by the user
         """
         ## TODO for your custom plugin
-        if param.name() == "a_parameter_you've_added_in_self.params":
+        if param.name() == 'axis':
+            self.axis_unit = self.controller.your_method_to_get_correct_axis_unit()
+            # do this only if you can and if the units are not known beforehand, for instance
+            # if the motors connected to the controller are of different type (mm, µm, nm, , etc...)
+            # see BrushlessDCMotor from the thorlabs plugin for an exemple
+
+        elif param.name() == "a_parameter_you've_added_in_self.params":
            self.controller.your_method_to_apply_this_param_change()
         else:
             pass

@@ -83,8 +83,11 @@ class DAQ_2DViewer_Template(DAQ_Viewer_base):
             False if initialization failed otherwise True
         """
         raise NotImplemented  # TODO when writing your own plugin remove this line and modify the one below
-        self.ini_detector_init(old_controller=controller,
-                               new_controller=PythonWrapperOfYourInstrument())
+        self.ini_detector_init(slave_controller=controller)
+
+        if self.is_master:
+            self.controller = PythonWrapperOfYourInstrument()  #instantiate you driver with whatever arguments are needed
+            self.controller.open_communication() # call eventual methods
 
         ## TODO for your custom plugin
         # get the x_axis (you may want to to this also in the commit settings if x_axis may have changed

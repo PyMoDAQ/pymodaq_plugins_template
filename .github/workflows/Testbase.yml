@@ -18,7 +18,7 @@ jobs:
       QT_DEBUG_PLUGINS: 1
     steps:
       - name: Set up Python ${{ inputs.python }}
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Install dependencies
         uses: actions/setup-python@v4
         with:
@@ -29,7 +29,7 @@ jobs:
           python -m pip install --upgrade pip
           export QT_DEBUG_PLUGINS=1
           pip install flake8 pytest pytest-cov pytest-qt pytest-xdist pytest-xvfb setuptools wheel numpy h5py ${{ inputs.qt5 }} toml
-          pip install pymodaq
+          pip install pymodaq pyqt5
           pip install -e .
       - name: create local pymodaq folder and setting permissions
         run: |

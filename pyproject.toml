@@ -1,5 +1,5 @@
 [build-system]
-requires = ["hatchling>=1.9.0", "hatch-vcs", "toml", "pymodaq_utils"]
+requires = ["hatchling>=1.9.0", "hatch-vcs", "toml", "pymodaq_utils>=0.0.3"]
 build-backend = "hatchling.build"
 
 [project]
@@ -32,9 +32,6 @@ classifiers = [
 [tool.hatch.version]
 source = "vcs"
 fallback-version = '0.0.1'
-
-[tool.hatch.build.hooks.vcs]
-version-file = "_version.py"
 
 [tool.hatch.build.targets.sdist]
 include = [

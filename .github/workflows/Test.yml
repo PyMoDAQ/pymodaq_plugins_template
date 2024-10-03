@@ -6,5 +6,5 @@ jobs:
   call_workflow:
     uses: ./.github/workflows/Testbase.yml
     with:
-      python: '3.10'
+      python: '3.11'
       qt5: 'pyqt5'

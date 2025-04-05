@@ -20,7 +20,7 @@ jobs:
       - name: Set up Python ${{ inputs.python }}
         uses: actions/checkout@v4.2.2
       - name: Install dependencies
-        uses: actions/setup-python@v5.4.0
+        uses: actions/setup-python@v5.5.0
         with:
           python-version: ${{ inputs.python }}
       - name: Install package

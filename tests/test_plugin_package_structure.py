@@ -126,7 +126,7 @@ def test_compatibility(capsys):
 
     plugin = PyMoDAQPlugin(get_package_name(), None)
     success = plugin.all_imports_valid()
-    msg = '\n'.join(plugin._failed_imports + [''])
+    msg = '\n'.join(plugin.failed_imports + [''])
 
     if not success:
         plugin.save_import_report(".")

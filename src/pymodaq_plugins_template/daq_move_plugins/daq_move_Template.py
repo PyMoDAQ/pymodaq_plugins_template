@@ -6,8 +6,10 @@ from pymodaq.control_modules.move_utility_classes import (DAQ_Move_base, comon_p
 from pymodaq_utils.utils import ThreadCommand  # object used to send info back to the main thread
 from pymodaq_gui.parameter import Parameter
 
-#  TODO Replace this fake import with the import of the real python wrapper of your instrument
-from pymodaq_plugins_template.hardware.PythonWrapperFileOfYourInstrument import PythonWrapperObjectOfYourInstrument
+#  TODO:
+#  Replace the following fake import with the import of the real Python wrapper of your instrument. Here we suppose that
+#  the wrapper is in the hardware directory, but it could come from an external librairy like pylablib or pymeasure.
+from pymodaq_plugins_template.hardware.python_wrapper_file_of_your_instrument import PythonWrapperObjectOfYourInstrument
 
 # TODO:
 # (1) change the name of the following class to DAQ_Move_TheNameOfYourChoice
@@ -15,6 +17,8 @@ from pymodaq_plugins_template.hardware.PythonWrapperFileOfYourInstrument import 
 #     for the class name and the file name.)
 # (3) this file should then be put into the right folder, namely IN THE FOLDER OF THE PLUGIN YOU ARE DEVELOPING:
 #     pymodaq_plugins_my_plugin/daq_move_plugins
+
+
 class DAQ_Move_Template(DAQ_Move_base):
     """ Instrument plugin class for an actuator.
     

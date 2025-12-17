@@ -7,10 +7,10 @@ from pymodaq_gui.parameter import Parameter
 from pymodaq.control_modules.viewer_utility_classes import DAQ_Viewer_base, comon_parameters, main
 from pymodaq.utils.data import DataFromPlugins
 
-
-class PythonWrapperOfYourInstrument:
-    #  TODO Replace this fake class with the import of the real python wrapper of your instrument
-    pass
+#  TODO:
+#  Replace the following fake import with the import of the real Python wrapper of your instrument. Here we suppose that
+#  the wrapper is in the hardware directory, but it could come from an external librairy like pylablib or pymeasure.
+from pymodaq_plugins_template.hardware.python_wrapper_file_of_your_instrument import PythonWrapperObjectOfYourInstrument
 
 # TODO:
 # (1) change the name of the following class to DAQ_1DViewer_TheNameOfYourChoice
@@ -51,7 +51,7 @@ class DAQ_1DViewer_Template(DAQ_Viewer_base):
     def ini_attributes(self):
         #  TODO declare the type of the wrapper (and assign it to self.controller) you're going to use for easy
         #  autocompletion
-        self.controller: PythonWrapperOfYourInstrument = None
+        self.controller: PythonWrapperObjectOfYourInstrument = None
 
         # TODO declare here attributes you want/need to init with a default value
 
@@ -89,7 +89,7 @@ class DAQ_1DViewer_Template(DAQ_Viewer_base):
 
         raise NotImplementedError  # TODO when writing your own plugin remove this line and modify the one below
         if self.is_master:
-            self.controller = PythonWrapperOfYourInstrument()  #instantiate you driver with whatever arguments are needed
+            self.controller = PythonWrapperObjectOfYourInstrument()  #instantiate you driver with whatever arguments are needed
             self.controller.open_communication() # call eventual methods
             initialized = self.controller.a_method_or_atttribute_to_check_if_init()  # TODO
         else:

@@ -5,7 +5,7 @@ from pymodaq_utils.config import Config, ConfigError
 from pymodaq_utils.logger import set_logger, get_module_name
 
 from pymodaq.utils.config import get_set_preset_path
-from pymodaq.extensions.utils import CustomExt
+from pymodaq.extensions.custom_ext import CustomExt
 
 
 # todo: replace here *pymodaq_plugins_template* by your plugin package name

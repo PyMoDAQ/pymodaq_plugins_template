@@ -6,10 +6,10 @@ from pymodaq.control_modules.move_utility_classes import (DAQ_Move_base, comon_p
 from pymodaq_utils.utils import ThreadCommand  # object used to send info back to the main thread
 from pymodaq_gui.parameter import Parameter
 
-
-class PythonWrapperOfYourInstrument:
-    #  TODO Replace this fake class with the import of the real python wrapper of your instrument
-    pass
+#  TODO:
+#  Replace the following fake import with the import of the real Python wrapper of your instrument. Here we suppose that
+#  the wrapper is in the hardware directory, but it could come from an external librairy like pylablib or pymeasure.
+from pymodaq_plugins_template.hardware.python_wrapper_file_of_your_instrument import PythonWrapperObjectOfYourInstrument
 
 # TODO:
 # (1) change the name of the following class to DAQ_Move_TheNameOfYourChoice
@@ -17,6 +17,8 @@ class PythonWrapperOfYourInstrument:
 #     for the class name and the file name.)
 # (3) this file should then be put into the right folder, namely IN THE FOLDER OF THE PLUGIN YOU ARE DEVELOPING:
 #     pymodaq_plugins_my_plugin/daq_move_plugins
+
+
 class DAQ_Move_Template(DAQ_Move_base):
     """ Instrument plugin class for an actuator.
     
@@ -56,7 +58,7 @@ class DAQ_Move_Template(DAQ_Move_base):
     def ini_attributes(self):
         #  TODO declare the type of the wrapper (and assign it to self.controller) you're going to use for easy
         #  autocompletion
-        self.controller: PythonWrapperOfYourInstrument = None
+        self.controller: PythonWrapperObjectOfYourInstrument = None
 
         #TODO declare here attributes you want/need to init with a default value
         pass
@@ -133,7 +135,7 @@ class DAQ_Move_Template(DAQ_Move_base):
         """
         raise NotImplementedError  # TODO when writing your own plugin remove this line and modify the ones below
         if self.is_master:  # is needed when controller is master
-            self.controller = PythonWrapperOfYourInstrument(arg1, arg2, ...) #  arguments for instantiation!)
+            self.controller = PythonWrapperObjectOfYourInstrument(arg1, arg2, ...) #  arguments for instantiation!)
             initialized = self.controller.a_method_or_atttribute_to_check_if_init()  # todo
             # todo: enter here whatever is needed for your controller initialization and eventual
             #  opening of the communication channel

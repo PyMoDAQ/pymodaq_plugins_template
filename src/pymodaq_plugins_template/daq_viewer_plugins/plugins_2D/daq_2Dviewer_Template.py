@@ -139,8 +139,7 @@ class DAQ_2DViewer_Template(DAQ_Viewer_base):
         self.dte_signal.emit(DataToExport('myplugin',
                                           data=[DataFromPlugins(name='Mock1', data=data_tot,
                                                                 dim='Data2D', labels=['label1'],
-                                                                x_axis=self.x_axis,
-                                                                y_axis=self.y_axis), ]))
+                                                                axes=[self.x_axis, self.y_axis]), ]))
 
         ##asynchrone version (non-blocking function with callback)
         self.controller.your_method_to_start_a_grab_snap(self.callback)

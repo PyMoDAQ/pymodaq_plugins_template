@@ -4,7 +4,6 @@ from pymodaq_gui import utils as gutils
 from pymodaq_utils.config import Config, ConfigError
 from pymodaq_utils.logger import set_logger, get_module_name
 
-from pymodaq.utils.config import get_set_preset_path
 from pymodaq.extensions.utils import CustomExt
 
 
@@ -39,7 +38,7 @@ class CustomExtensionTemplate(CustomExt):
 
         self.setup_ui()
 
-    def setup_docks(self):
+    def setup_docks_and_widgets(self):
         """Mandatory method to be subclassed to setup the docks layout
 
         Examples
@@ -57,6 +56,27 @@ class CustomExtensionTemplate(CustomExt):
         # reminder, the attribute self.settings_tree will  render the widgets in a Qtree.
         # If you wish to see it in your app, add is into a Dock
         raise NotImplementedError
+
+    def setup_menus_and_toolbars(self, menubar: QtWidgets.QMenuBar = None):
+        """Non mandatory method to be subclassed in order to create a menubar
+
+        create menu for actions contained into the self._actions, for instance:
+
+        Examples
+        --------
+        >>>file_menu = menubar.addMenu('File')
+        >>>self.affect_to('load', file_menu)
+        >>>self.affect_to('save', file_menu)
+
+        >>>file_menu.addSeparator()
+        >>>self.affect_to('quit', file_menu)
+
+        See Also
+        --------
+        pymodaq.utils.managers.action_manager.ActionManager
+        """
+        # todo create and populate menu using actions defined above in self.setup_actions
+        self.create_dashboard_toolbar()
 
     def setup_actions(self):
         """Method where to create actions to be subclassed. Mandatory
@@ -79,26 +99,6 @@ class CustomExtensionTemplate(CustomExt):
         """Connect actions and/or other widgets signal to methods"""
         raise NotImplementedError
 
-    def setup_menu(self, menubar: QtWidgets.QMenuBar = None):
-        """Non mandatory method to be subclassed in order to create a menubar
-
-        create menu for actions contained into the self._actions, for instance:
-
-        Examples
-        --------
-        >>>file_menu = menubar.addMenu('File')
-        >>>self.affect_to('load', file_menu)
-        >>>self.affect_to('save', file_menu)
-
-        >>>file_menu.addSeparator()
-        >>>self.affect_to('quit', file_menu)
-
-        See Also
-        --------
-        pymodaq.utils.managers.action_manager.ActionManager
-        """
-        # todo create and populate menu using actions defined above in self.setup_actions
-        pass
 
     def value_changed(self, param):
         """ Actions to perform when one of the param's value in self.settings is changed from the
@@ -118,22 +118,20 @@ class CustomExtensionTemplate(CustomExt):
 
 
 def main():
-    from pymodaq.utils.gui_utils.utils import mkQApp
-    from pymodaq.utils.gui_utils.loader_utils import load_dashboard_with_preset
-    from pymodaq.utils.messenger import messagebox
+    import sys
+    from pymodaq_gui.qt_utils import mkQApp
+    from pymodaq.dashboard import create_load_dashboard
+    from pymodaq.utils.gui_utils.loader_utils import create_extension
 
-    app = mkQApp(EXTENSION_NAME)
-    try:
-        preset_file_name = plugin_config('presets', f'preset_for_{CLASS_NAME.lower()}')
-        load_dashboard_with_preset(preset_file_name, EXTENSION_NAME)
-        app.exec()
+    app = mkQApp('Custom Ext')
 
-    except ConfigError as e:
-        messagebox(f'No entry with name f"preset_for_{CLASS_NAME.lower()}" has been configured'
-                   f'in the plugin config file. The toml entry should be:\n'
-                   f'[presets]'
-                   f"preset_for_{CLASS_NAME.lower()} = {'a name for an existing preset'}"
-                   )
+    win, dashboard = create_load_dashboard()
+    win.mainwindow.setVisible(False)
+
+    win_ext, ext = create_extension(dashboard, CustomExtensionTemplate)
+    win_ext.show()
+
+    sys.exit(app.exec())
 
 
 if __name__ == '__main__':

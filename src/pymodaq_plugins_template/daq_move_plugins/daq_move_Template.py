@@ -63,7 +63,7 @@ class DAQ_Move_Template(DAQ_Move_base):
         #TODO declare here attributes you want/need to init with a default value
         pass
 
-    def get_actuator_value(self):
+    def get_actuator_value(self) -> DataActuator:
         """Get the current value from the hardware with scaling conversion.
 
         Returns

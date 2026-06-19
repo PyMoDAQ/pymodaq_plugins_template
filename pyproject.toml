@@ -12,7 +12,10 @@ package-url = 'https://github.com/PyMoDAQ/pymodaq_plugins_template' #todo modify
 name = "pymodaq_plugins_template" #todo modify template by your plugin short name
 description = 'some word about your plugin'
 dependencies = [
-    "pymodaq>=5.0.0",
+    "pymodaq>=5.2.0",
+    "pymodaq_utils>=5.2.0",
+    "pymodaq_gui>=5.2.0",
+    "pymodaq_data>=5.2.0",
     #todo: list here all dependencies your package may have
 ]
 

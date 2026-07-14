@@ -2,6 +2,7 @@
 from typing import Union, List, Dict
 from pymodaq.control_modules.move_utility_classes import (DAQ_Move_base, comon_parameters_fun,
                                                           main, DataActuatorType, DataActuator)
+from pymodaq.control_modules.daq_move_ui.utils import UiType
 
 from pymodaq_utils.utils import ThreadCommand  # object used to send info back to the main thread
 from pymodaq_gui.parameter import Parameter
@@ -47,13 +48,22 @@ class DAQ_Move_Template(DAQ_Move_base):
     # TODO  a single str (the same one is applied to all axes) or a list of str (as much as the number of axes)
     _epsilon: Union[float, List[float]] = 0.1  # TODO replace this by a value that is correct depending on your controller
     # TODO it could be a single float of a list of float (as much as the number of axes)
+    # _epsilon is the initial default value for the epsilon parameter allowing pymodaq to know if the controller reached
+    # the target value. It is the developer responsibility to put here a meaningful value
+
+
     data_actuator_type = DataActuatorType.DataActuator  # wether you use the new data style for actuator otherwise set this
     # as  DataActuatorType.float  (or entirely remove the line)
 
+    #todo: set the correct values for these two variables (pymodaq>5.3.0 only)
+    ui_type = UiType.NONE  # should precise (force if possible) what should be the ui type to be used with this
+    # actuator. If NONE, PyMoDAQ will use the default ui type (see preferences).
+    has_encoder = True  # tell PyMoDAQ if this actuator is able to set an absolute position and read the controller
+    # value. If False, you should consider having ui_type = UiType.RELATIVE
+
+
     params = [   # TODO for your custom plugin: elements to be added here as dicts in order to control your custom stage
                 ] + comon_parameters_fun(is_multiaxes, axis_names=_axis_names, epsilon=_epsilon)
-    # _epsilon is the initial default value for the epsilon parameter allowing pymodaq to know if the controller reached
-    # the target value. It is the developer responsibility to put here a meaningful value
 
     def ini_attributes(self):
         #  TODO declare the type of the wrapper (and assign it to self.controller) you're going to use for easy
@@ -169,8 +179,8 @@ class DAQ_Move_Template(DAQ_Move_base):
         ----------
         value: (float) value of the relative target positioning
         """
-        value = self.check_bound(self.current_position + value) - self.current_position
-        self.target_value = value + self.current_position
+        value = self.check_bound(self.current_value + value) - self.current_value
+        self.target_value = value + self.current_value
         value = self.set_position_relative_with_scaling(value)
 
         ## TODO for your custom plugin

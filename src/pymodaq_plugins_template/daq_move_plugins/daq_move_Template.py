@@ -55,7 +55,8 @@ class DAQ_Move_Template(DAQ_Move_base):
     data_actuator_type = DataActuatorType.DataActuator  # wether you use the new data style for actuator otherwise set this
     # as  DataActuatorType.float  (or entirely remove the line)
 
-    #todo: set the correct values for these two variables (pymodaq>5.3.0 only)
+    #todo: set the correct values for these two variables (pymodaq>5.3.0 only, if developing using lower version, just
+    # remove the two lines)
     ui_type = UiType.NONE  # should precise (force if possible) what should be the ui type to be used with this
     # actuator. If NONE, PyMoDAQ will use the default ui type (see preferences).
     has_encoder = True  # tell PyMoDAQ if this actuator is able to set an absolute position and read the controller

@@ -76,7 +76,7 @@ class CustomExtensionTemplate(CustomExt):
         pymodaq.utils.managers.action_manager.ActionManager
         """
         # todo create and populate menu using actions defined above in self.setup_actions
-        self.create_dashboard_toolbar()
+        self.create_dashboard_toolbar(add_break=False)
 
     def setup_actions(self):
         """Method where to create actions to be subclassed. Mandatory

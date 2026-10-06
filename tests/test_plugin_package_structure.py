@@ -24,4 +24,5 @@ from pymodaq_utils.plugin_testing import PluginPackageChecks
 class TestPlugin(PluginPackageChecks):
     # package_name = 'pymodaq_plugins_xxxx'  # only if it cannot be found from the pyproject.toml and the package folder
     fail_on = 'error'  # 'error', 'warning' or 'todo' (also fail on the unfinished parts)
-    strict_imports = True  # fail if a module cannot be imported because of a missing dependency
+    strict_imports = False  # True: also fail when a module cannot be imported (missing dependency or driver); the
+    # modules of an instrument whose driver cannot be installed on the CI runner are then skipped, not failed

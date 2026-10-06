@@ -1,0 +1,78 @@
+name: Compatibility with pymodaq (latest release)
+
+on:
+  workflow_call:
+  
+  pull_request:
+
+  push:
+    branches:
+    - '*'
+
+concurrency:
+  # github.workflow: name of the workflow
+  # github.event.pull_request.number || github.ref: pull request number or branch name if not a pull request
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  # Cancel in-progress runs when a new workflow with the same group name is triggered
+  cancel-in-progress: true
+  
+jobs:
+  tests:
+    continue-on-error: true
+    strategy:
+      fail-fast: false
+      matrix:
+        os: ["ubuntu-latest", "windows-latest"]
+        python-version: ["3.9", "3.10", "3.11", "3.12"]
+        qt-backend: ["pyqt5", "pyqt6", "pyside6"]
+    runs-on: ${{ matrix.os }}
+    env:
+      DISPLAY: ':99'
+      QT_DEBUG_PLUGINS: 1
+
+    steps:
+      - name: Set project name environment variable
+        run: |
+          echo "plugin_name=$(echo '${{ github.repository }}' | cut -d'/' -f2)" >> $GITHUB_ENV
+
+      - name: Checkout the repo
+        uses: actions/checkout@v5.0.0
+ 
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v6.0.0
+        with:
+          python-version: ${{ matrix.python-version }}
+          
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install flake8 pytest pytest-cov pytest-qt pytest-xvfb pytest-xdist setuptools wheel numpy h5py pymodaq ${{ matrix.qt-backend }}
+          pip install -e .    
+      
+      # Create folder and set permissions on Ubuntu
+      - name: Create local pymodaq folder setup env (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt update
+          sudo apt install -y libxkbcommon-x11-0 libxcb-icccm4 libxcb-image0 libxcb-keysyms1 libxcb-cursor0 libxcb-randr0 libxcb-render-util0 libxcb-xinerama0 libxcb-xfixes0 x11-utils libgl1 libegl1
+          export QT_DEBUG_PLUGINS=1
+          sudo mkdir -p /etc/.pymodaq
+          sudo chmod uo+rw /etc/.pymodaq
+      - name: Exporting debug variables (Windows)
+        if: runner.os == 'Windows'
+        run: |
+          set QT_DEBUG_PLUGINS=1
+
+      - name: Compatibility tests with ${{ matrix.os }} ${{ matrix.python-version }} ${{ matrix.qt-backend}}
+        run: |
+          pytest -vv -n 1 -k "test_compatibility"          
+
+      - name: Upload compatibility report
+        if: failure()
+        uses: actions/upload-artifact@v4.6.2
+        with:
+          name:  
+          path: 'import_report_tests_${{ env.plugin_name }}_None.txt'
+          if-no-files-found: error 
+    
+  

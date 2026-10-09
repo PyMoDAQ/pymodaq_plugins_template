@@ -82,7 +82,9 @@ File and class names must match: `daq_move_<Name>.py` holds `DAQ_Move_<Name>`; `
   mock controller and keeps the plugin file readable.
 - Defaults live in `resources/config_template.toml`, not in the code. Read configuration values through
   `GlobalConfig` from `pymodaq_utils.config`: a singleton that wraps the `Config` objects of all packages, e.g.
-  `GlobalConfig()('gui', 'style', 'theme')`. Do not parse the toml files yourself.
+  `GlobalConfig()('gui', 'style', 'theme')`. Do not parse the toml files yourself, and do not instantiate a `Config`
+  class directly (deprecated): PyMoDAQ registers the `Config` of `<your_package>/utils.py` in `GlobalConfig` when it
+  discovers the plugin, under the package name without `pymodaq_plugins_`.
 
 **Legacy patterns to avoid** (older tutorials and models still produce them; `check_plugin` flags several):
 `stage_names` (use `_axis_names`), `_epsilon` (use `_epsilons`), `data_actuator_type = float` (use
@@ -96,6 +98,31 @@ and the deprecated `CustomApp` / `CustomExt` hooks `setup_docks` and `setup_menu
 - Entry point group `pymodaq.extensions` in `pyproject.toml`; each module in `extensions/` defines
   `EXTENSION_NAME` (menu label), `CLASS_NAME` (class name) and a class derived from `CustomExt`.
 - Import: `from pymodaq.utils.custom_ext import CustomExt`.
+- A plugin extension follows exactly the pattern of the core extensions (`daq_scan`, `sequencer`, `ramping`, data
+  mixer). The only difference is `EXTENSION_NAME` and `CLASS_NAME`, which the Dashboard needs to recognise it.
+- **`_quit_fun(self) -> bool` must be overridden and return `True`** (return `False`, after telling the user, while
+  the extension is running). The base implementation returns `None`, which prevents closing.
+- **`main()` pattern** (to run the extension alone, same as the core ones):
+
+  ```python
+  def main():
+      import sys
+      from pymodaq_gui.qt_utils import mkQApp
+      from pymodaq.dashboard import load_dashboard_with_arguments
+      from pymodaq.utils.gui_utils.loader_utils import create_extension
+
+      app = mkQApp('My Extension')
+      win, dashboard, _ = load_dashboard_with_arguments(show_dashboard=False, load_extension=False)
+      win.mainwindow.setVisible(False)
+      win_ext, ext = create_extension(dashboard, MyExtension, show_extension=True)
+      sys.exit(app.exec())
+  ```
+
+  `load_dashboard_with_arguments` reads the command line (`-x EXPERIMENT_NAME`, `-s STATE_NAME`).
+  `create_extension` already shows the window: do not call `win_ext.show()` again, and do not use `create_load_dashboard`
+  here.
+- Long-running work (a scan, a sequence, a ramp) goes in an `ExtensionWorker` subclass run in a thread, started and
+  stopped from the extension's workflow actions, as in `sequencer.py` and `ramping.py`.
 - `__init__(self, parent: DockArea, dashboard)`: call `super().__init__(parent, dashboard)`, then `self.setup_ui()`.
 - **Experiment and state belong to the Dashboard.** The *experiment* is the list of instruments (actuators and
   detectors) the Dashboard manages and controls; the *state* is the state of that experiment, mostly the values of the

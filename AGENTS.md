@@ -80,12 +80,16 @@ File and class names must match: `daq_move_<Name>.py` holds `DAQ_Move_<Name>`; `
 - Units are `pint`-based. Give every actuator value and every `Axis` a unit; mismatches raise `DataUnitError`.
 - Hardware access code goes in `hardware/`, behind a small wrapper class. This lets the plugin be tested with a
   mock controller and keeps the plugin file readable.
-- Defaults live in `resources/config_template.toml` (read with the package `Config`), not in the code.
+- Defaults live in `resources/config_template.toml`, not in the code. Read configuration values through
+  `GlobalConfig` from `pymodaq_utils.config`: a singleton that wraps the `Config` objects of all packages, e.g.
+  `GlobalConfig()('gui', 'style', 'theme')`. Do not parse the toml files yourself.
 
 **Legacy patterns to avoid** (older tutorials and models still produce them; `check_plugin` flags several):
 `stage_names` (use `_axis_names`), `_epsilon` (use `_epsilons`), `data_actuator_type = float` (use
 `DataActuatorType.DataActuator`), the group names `multiaxes` and `multi_status` (now `controller` and
-`controller_status`), and importing `CustomExt` from `pymodaq.extensions.custom_ext` (use `pymodaq.utils.custom_ext`).
+`controller_status`), importing `CustomExt` from `pymodaq.extensions.custom_ext` (use `pymodaq.utils.custom_ext`),
+and the deprecated `CustomApp` / `CustomExt` hooks `setup_docks` and `setup_menu` (use `setup_docks_and_widgets` and
+`setup_menus_and_toolbars`).
 
 ## 4. Dashboard extensions (`CustomExt`)
 
@@ -100,15 +104,17 @@ File and class names must match: `daq_move_<Name>.py` holds `DAQ_Move_<Name>`; `
   save/load of instrument configurations. Override `do_things_after_experiment_set(experiment_name, show_dashboard)`
   to react when an experiment is set (the base class refreshes `self.modules_manager` there), and use
   `create_dashboard_toolbar(...)` to expose the experiment and state actions in your extension.
-- The Dashboard's instruments are reached through `self.modules_manager`. Do not create control modules
-  yourself inside an extension, and do not talk to the hardware directly.
-- Implement the lifecycle in the template: `setup_docks`/`setup_docks_and_widgets`, `setup_actions`,
-  `connect_things`, `value_changed`, `quit_fun`. The GUI thread runs your code; react to module signals, never
-  poll or sleep.
+- The Dashboard's instruments are reached through `self.modules_manager`. This `ModulesManager` is created anew for
+  each extension by the base class `__init__`, so that every extension can handle different instruments: never share
+  it between extensions, replace it, or reuse the Dashboard's one. Do not create control modules yourself inside an
+  extension, and do not talk to the hardware directly.
+- Implement the lifecycle: `setup_docks_and_widgets`, `setup_actions`, `setup_menus_and_toolbars`,
+  `connect_things`, `value_changed`, `quit_fun`. `setup_docks` and `setup_menu` are deprecated. The GUI thread runs
+  your code; react to module signals, never poll or sleep.
 
 ## 5. Standalone apps (`CustomApp`)
 
-Only when no instrument is needed. Same lifecycle as above, `parent` is a `DockArea` or `QMainWindow`, and
+Only when no instrument is needed. Same (non-deprecated) lifecycle as above, `parent` is a `DockArea` or `QMainWindow`, and
 `main()` creates the app with `mkQApp`. If instruments become necessary, move the logic to a `CustomExt`.
 
 ## 6. Done checklist

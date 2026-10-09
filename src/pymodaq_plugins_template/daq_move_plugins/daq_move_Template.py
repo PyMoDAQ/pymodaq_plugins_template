@@ -46,9 +46,9 @@ class DAQ_Move_Template(DAQ_Move_base):
     _axis_names: Union[List[str], Dict[str, int]] = ['Axis1', 'Axis2']  # TODO for your plugin: complete the list
     _controller_units: Union[str, List[str]] = 'mm'  # TODO for your plugin: put the correct unit here, it could be
     # TODO  a single str (the same one is applied to all axes) or a list of str (as much as the number of axes)
-    _epsilon: Union[float, List[float]] = 0.1  # TODO replace this by a value that is correct depending on your controller
+    _epsilons: Union[float, List[float]] = 0.1  # TODO replace this by a value that is correct depending on your controller
     # TODO it could be a single float of a list of float (as much as the number of axes)
-    # _epsilon is the initial default value for the epsilon parameter allowing pymodaq to know if the controller reached
+    # _epsilons is the initial default value for the epsilon parameter allowing pymodaq to know if the controller reached
     # the target value. It is the developer responsibility to put here a meaningful value
 
 
@@ -64,7 +64,7 @@ class DAQ_Move_Template(DAQ_Move_base):
 
 
     params = [   # TODO for your custom plugin: elements to be added here as dicts in order to control your custom stage
-                ] + comon_parameters_fun(is_multiaxes, axis_names=_axis_names, epsilon=_epsilon)
+                ] + comon_parameters_fun(axis_names=_axis_names)
 
     def ini_attributes(self):
         #  TODO declare the type of the wrapper (and assign it to self.controller) you're going to use for easy

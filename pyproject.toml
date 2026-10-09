@@ -12,10 +12,10 @@ package-url = 'https://github.com/PyMoDAQ/pymodaq_plugins_template' #todo modify
 name = "pymodaq_plugins_template" #todo modify template by your plugin short name
 description = 'some word about your plugin'
 dependencies = [
-    "pymodaq>=5.2.0",
-    "pymodaq_utils>=5.2.0",
-    "pymodaq_gui>=5.2.0",
-    "pymodaq_data>=5.2.0",
+    "pymodaq>=5.3.1",
+    "pymodaq_utils>=5.3.1",
+    "pymodaq_gui>=5.3.1",
+    "pymodaq_data>=5.3.1",
     #todo: list here all dependencies your package may have
 ]
 
@@ -33,7 +33,7 @@ maintainers = [
 dynamic = ["version", "urls", "entry-points"]
 readme = "README.rst"
 license = { file="LICENSE" }
-requires-python = ">=3.8"
+requires-python = ">=3.10"
 
 classifiers = [
     "Development Status :: 5 - Production/Stable",
@@ -41,10 +41,10 @@ classifiers = [
     "License :: OSI Approved :: MIT License",
     "Natural Language :: English",
     "Operating System :: OS Independent",
-    "Programming Language :: Python :: 3.8",
-    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
     "Topic :: Scientific/Engineering :: Human Machine Interfaces",
     "Topic :: Scientific/Engineering :: Visualization",
     "Topic :: Software Development :: Libraries :: Python Modules",

@@ -27,7 +27,7 @@ Prefer the first option that fits:
 pip install -e .                 # editable install of this plugin, from the repository root
 check_plugin                     # static report on this package (hardware not needed)
 check_plugin --fail-on todo -v   # also list every unfinished TODO
-pytest                           # template tests (package structure, plugin checks)
+pytest                           # template tests (package structure, plugin checks, behaviour against a fake controller)
 ```
 
 Installing PyMoDAQ itself is a separate matter. A plugin only needs the released packages (`pymodaq`,
@@ -85,6 +85,14 @@ File and class names must match: `daq_move_<Name>.py` holds `DAQ_Move_<Name>`; `
   `GlobalConfig()('gui', 'style', 'theme')`. Do not parse the toml files yourself, and do not instantiate a `Config`
   class directly (deprecated): PyMoDAQ registers the `Config` of `<your_package>/utils.py` in `GlobalConfig` when it
   discovers the plugin, under the package name without `pymodaq_plugins_`.
+
+**Testing behaviour without hardware.** `tests/plugin_harness.py` drives a plugin the way PyMoDAQ does, without a GUI:
+`make_actuator` / `make_detector` (instantiate and call `ini_stage` / `ini_detector`), `move_abs_and_wait`,
+`move_rel_and_wait`, `move_home_and_wait`, `grab_and_wait` (return the final position or the `DataToExport`, and fail
+on a timeout) and `assert_units`. `tests/example_mock_plugins.py` shows a fake controller and the smallest actuator,
+multi-axes actuator and 1D detector; `tests/test_plugin_behaviour.py` shows the tests to copy. Write the vendor
+communication behind a wrapper class in `hardware/`, write a fake with the same public methods, and run your real
+plugin class against it (monkeypatch the wrapper class). Targets reach the plugin in the axis unit, as in PyMoDAQ.
 
 **Legacy patterns to avoid** (older tutorials and models still produce them; `check_plugin` flags several):
 `stage_names` (use `_axis_names`), `_epsilon` (use `_epsilons`), `data_actuator_type = float` (use

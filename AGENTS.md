@@ -147,6 +147,8 @@ Only when no instrument is needed. Same (non-deprecated) lifecycle as above, `pa
 ## 6. Done checklist
 
 - [ ] Names (package, files, classes) match and the `template` placeholders are gone.
+- [ ] The `[features]` flags at the top of `pyproject.toml` match the folders you use (`instruments`, `extensions`,
+      `models`...): entry points are generated only for the features set to `true` (`check_plugin` warns, PMQ109).
 - [ ] `check_plugin` passes; no `NotImplementedError` or `TODO` left in the files you wrote.
 - [ ] Units set on all actuator values and axes; safe behaviour in `close()` and on errors.
 - [ ] Tests added for new behaviour using a mock controller (no real hardware in CI).

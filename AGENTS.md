@@ -94,6 +94,11 @@ multi-axes actuator and 1D detector; `tests/test_plugin_behaviour.py` shows the 
 communication behind a wrapper class in `hardware/`, write a fake with the same public methods, and run your real
 plugin class against it (monkeypatch the wrapper class). Targets reach the plugin in the axis unit, as in PyMoDAQ.
 
+These tests only check your side of the PyMoDAQ contract (return types, units, signals, shared controller, `close`)
+against a fake that encodes what you believe the driver does. They say nothing about the device: timing, error replies,
+real ranges and units. A passing run is not a hardware validation: never state that a plugin works on an instrument
+that was not used, say what was tested on the real device and what only against a fake.
+
 **Legacy patterns to avoid** (older tutorials and models still produce them; `check_plugin` flags several):
 `stage_names` (use `_axis_names`), `_epsilon` (use `_epsilons`), `data_actuator_type = float` (use
 `DataActuatorType.DataActuator`), the group names `multiaxes` and `multi_status` (now `controller` and

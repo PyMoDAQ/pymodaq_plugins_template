@@ -146,7 +146,7 @@ class DAQ_Move_Template(DAQ_Move_base):
         """
         raise NotImplementedError  # TODO when writing your own plugin remove this line and modify the ones below
         if self.is_master:  # is needed when controller is master
-            self.controller = PythonWrapperObjectOfYourInstrument(arg1, arg2, ...) #  arguments for instantiation!)
+            self.controller = PythonWrapperObjectOfYourInstrument()  # TODO add the arguments for the instantiation
             initialized = self.controller.a_method_or_atttribute_to_check_if_init()  # todo
             # todo: enter here whatever is needed for your controller initialization and eventual
             #  opening of the communication channel

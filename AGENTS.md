@@ -86,7 +86,7 @@ File and class names must match: `daq_move_<Name>.py` holds `DAQ_Move_<Name>`; `
   class directly (deprecated): PyMoDAQ registers the `Config` of `<your_package>/utils.py` in `GlobalConfig` when it
   discovers the plugin, under the package name without `pymodaq_plugins_`.
 
-**Testing behaviour without hardware.** `tests/plugin_harness.py` drives a plugin the way PyMoDAQ does, without a GUI:
+**Testing behaviour without hardware.** `pymodaq.utils.plugin_testing` (shipped with PyMoDAQ >= 5.3.2) drives a plugin the way PyMoDAQ does, without a GUI:
 `make_actuator` / `make_detector` (instantiate and call `ini_stage` / `ini_detector`), `move_abs_and_wait`,
 `move_rel_and_wait`, `move_home_and_wait`, `grab_and_wait` (return the final position or the `DataToExport`, and fail
 on a timeout) and `assert_units`. `tests/example_mock_plugins.py` shows a fake controller and the smallest actuator,

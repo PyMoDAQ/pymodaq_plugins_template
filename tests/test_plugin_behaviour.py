@@ -1,6 +1,6 @@
 """Behaviour tests of instrument plugins against a fake controller: no hardware, no visible GUI.
 
-Here the harness is applied to the example fake plugins of ``example_mock_plugins.py``. To test your own plugin, copy
+Here the harness of ``pymodaq.utils.plugin_testing`` is applied to the example fake plugins of ``example_mock_plugins.py``. To test your own plugin, copy
 a test and replace the plugin class and the fake controller, for instance::
 
     from pymodaq_plugins_<name>.daq_move_plugins.daq_move_<Name> import DAQ_Move_<Name>
@@ -8,8 +8,9 @@ a test and replace the plugin class and the fake controller, for instance::
 """
 import pytest
 
-from plugin_harness import (make_actuator, make_detector, move_abs_and_wait, move_rel_and_wait, move_home_and_wait,
-                            grab_and_wait, assert_units, wait_for_signal, SignalTimeout)
+from pymodaq.utils.plugin_testing import (make_actuator, make_detector, move_abs_and_wait, move_rel_and_wait,
+                                          move_home_and_wait, grab_and_wait, assert_units, wait_for_signal,
+                                          SignalTimeout)
 from example_mock_plugins import DAQ_Move_Fake, DAQ_1DViewer_Fake, DAQ_MultiAxes_Fake
 
 

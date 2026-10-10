@@ -39,7 +39,7 @@ jobs:
       - name: Install the plugin with the latest PyMoDAQ release
         run: |
           python -m pip install --upgrade pip
-          pip install pytest pytest-qt pytest-xvfb pytest-xdist ${{ matrix.qt-backend }}
+          pip install pytest pytest-qt pytest-xvfb ${{ matrix.qt-backend }}
           pip install -e .
       - name: Tests
-        run: pytest -vv -n 1 tests
+        run: pytest -vv tests

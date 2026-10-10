@@ -52,8 +52,10 @@ class DAQ_Move_Template(DAQ_Move_base):
     # the target value. It is the developer responsibility to put here a meaningful value
 
 
-    data_actuator_type = DataActuatorType.DataActuator  # wether you use the new data style for actuator otherwise set this
-    # as  DataActuatorType.float  (or entirely remove the line)
+    data_actuator_type = DataActuatorType.DataActuator  # keep this line: move_abs / move_rel receive a DataActuator (with
+    # units) and get_actuator_value returns one. The default of the PyMoDAQ base class is DataActuatorType.float, only
+    # kept for old plugins (a plain float in the axis unit is exchanged instead): do not remove this line, and do not
+    # use DataActuatorType.float in a new plugin.
 
     #todo: set the correct values for these two variables (pymodaq>5.3.0 only, if developing using lower version, just
     # remove the two lines)
@@ -163,19 +165,20 @@ class DAQ_Move_Template(DAQ_Move_base):
         Parameters
         ----------
         value: DataActuator
-            Absolute target, with units (possibly not the ones of the controller, for instance the user can type
-            a target in cm for an axis in mm).
+            Absolute target, with units. (With the backcompatibility DataActuatorType.float it would be a plain float,
+            already expressed in the axis unit, but new plugins should not use it.)
         """
 
         value = self.check_bound(value)  #if user checked bounds, the defined bounds are applied here
         self.target_value = value
         value = self.set_position_with_scaling(value)  # apply scaling if the user specified one
         ## TODO for your custom plugin
-        # IMPORTANT: the controller only understands its own units. Always convert with value.value(self.axis_unit),
-        # it returns the magnitude expressed in the unit of this axis (the one of _controller_units, 'mm' here).
-        # value.value() alone is just the magnitude in whatever unit `value` happens to carry (1 cm gives 1.0, not 10.0):
-        # it would silently send the wrong target to the instrument. (axis_unit is the unit of the current axis,
-        # axis_units is the list/dict of the units of all the axes of a multiaxes controller.)
+        # IMPORTANT: the controller only understands its own units. Always send value.value(self.axis_unit), it returns
+        # the magnitude expressed in the unit of this axis (the one of _controller_units, 'mm' here). PyMoDAQ already
+        # converts the target to the axis unit before calling move_abs, but value.value() alone is just the magnitude
+        # in whatever unit `value` carries (1 cm gives 1.0, not 10.0): value.value(self.axis_unit) guards against a
+        # mistake, and keeps the plugin correct when move_abs is called from elsewhere with another unit.
+        # (axis_unit is the unit of the current axis, axis_units the list/dict of the units of all the axes.)
         raise NotImplementedError  # when writing your own plugin remove this line
         self.controller.your_method_to_set_an_absolute_value(value.value(self.axis_unit))  # when writing your own plugin replace this line
         self.emit_status(ThreadCommand('Update_Status', ['Some info you want to log']))

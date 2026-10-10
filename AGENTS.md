@@ -55,7 +55,10 @@ File and class names must match: `daq_move_<Name>.py` holds `DAQ_Move_<Name>`; `
 - `ini_stage(controller=None)` returns `(info: str, initialized: bool)`. If `self.is_master`, create the controller;
   otherwise store the `controller` passed in (several axes share one controller).
 - Class attributes: `is_multiaxes`, `_axis_names`, `_controller_units`, `_epsilons`,
-  `data_actuator_type = DataActuatorType.DataActuator`, optionally `ui_type` and `has_encoder`.
+  `data_actuator_type = DataActuatorType.DataActuator`, optionally `ui_type` and `has_encoder`. Always write the
+  `data_actuator_type` line: the default of the base class is `DataActuatorType.float`, a backcompatibility mode where
+  `move_abs`/`move_rel` receive a plain float (already in the axis unit) and `get_actuator_value` returns one. PyMoDAQ
+  guards that case, but do not use it in new code.
 - `params` = list of dicts + `comon_parameters_fun(is_multiaxes, axis_names=..., epsilon=...)`.
 - Positions are `DataActuator` objects with **units** (`units=self.axis_unit`); use `check_bound`,
   `set_position_with_scaling` and `get_position_with_scaling` as in the template.

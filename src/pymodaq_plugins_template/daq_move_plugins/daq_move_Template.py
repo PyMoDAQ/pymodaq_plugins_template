@@ -162,13 +162,20 @@ class DAQ_Move_Template(DAQ_Move_base):
 
         Parameters
         ----------
-        value: (float) value of the absolute target positioning
+        value: DataActuator
+            Absolute target, with units (possibly not the ones of the controller, for instance the user can type
+            a target in cm for an axis in mm).
         """
 
         value = self.check_bound(value)  #if user checked bounds, the defined bounds are applied here
         self.target_value = value
         value = self.set_position_with_scaling(value)  # apply scaling if the user specified one
         ## TODO for your custom plugin
+        # IMPORTANT: the controller only understands its own units. Always convert with value.value(self.axis_unit),
+        # it returns the magnitude expressed in the unit of this axis (the one of _controller_units, 'mm' here).
+        # value.value() alone is just the magnitude in whatever unit `value` happens to carry (1 cm gives 1.0, not 10.0):
+        # it would silently send the wrong target to the instrument. (axis_unit is the unit of the current axis,
+        # axis_units is the list/dict of the units of all the axes of a multiaxes controller.)
         raise NotImplementedError  # when writing your own plugin remove this line
         self.controller.your_method_to_set_an_absolute_value(value.value(self.axis_unit))  # when writing your own plugin replace this line
         self.emit_status(ThreadCommand('Update_Status', ['Some info you want to log']))
@@ -178,13 +185,16 @@ class DAQ_Move_Template(DAQ_Move_base):
 
         Parameters
         ----------
-        value: (float) value of the relative target positioning
+        value: DataActuator
+            Relative displacement, with units (convert it with value.value(self.axis_unit) before sending it to the
+            controller, see move_abs).
         """
         value = self.check_bound(self.current_value + value) - self.current_value
         self.target_value = value + self.current_value
         value = self.set_position_relative_with_scaling(value)
 
         ## TODO for your custom plugin
+        # IMPORTANT: send value.value(self.axis_unit), not value.value(): the controller only understands its own units
         raise NotImplementedError  # when writing your own plugin remove this line
         self.controller.your_method_to_set_a_relative_value(value.value(self.axis_unit))  # when writing your own plugin replace this line
         self.emit_status(ThreadCommand('Update_Status', ['Some info you want to log']))

@@ -78,6 +78,10 @@ File and class names must match: `daq_move_<Name>.py` holds `DAQ_Move_<Name>`; `
 - Settings are `pyqtgraph` Parameter dicts (`{'title', 'name', 'type', 'value', ...}`). React to changes in
   `commit_settings(param)` by `param.name()`.
 - Units are `pint`-based. Give every actuator value and every `Axis` a unit; mismatches raise `DataUnitError`.
+  What you send to a controller must be expressed in the controller units: use `value.value(self.axis_unit)` in
+  `move_abs` / `move_rel`, never `value.value()` (the magnitude in whatever unit the `DataActuator` carries, so 1 cm
+  would be sent as 1.0 to a controller in mm). `axis_unit` is the unit of the current axis, `axis_units` the list/dict
+  of all the axes of a multiaxes controller.
 - Hardware access code goes in `hardware/`, behind a small wrapper class. This lets the plugin be tested with a
   mock controller and keeps the plugin file readable.
 - Defaults live in `resources/config_template.toml`, not in the code. Read configuration values through

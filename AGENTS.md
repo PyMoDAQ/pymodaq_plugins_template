@@ -78,7 +78,8 @@ File and class names must match: `daq_move_<Name>.py` holds `DAQ_Move_<Name>`; `
   `self.emit_status(ThreadCommand('Update_Status', ['message']))`.
 - Do not block for long inside `grab_data` or a move; use the asynchronous pattern shown in the template and the
   polling that PyMoDAQ already does (`epsilon`).
-- Always release the hardware in `close()`, only if `self.is_master`. Leave actuators in a safe state on error.
+- Always release the hardware in `close()`, only if `self.is_master and self.controller is not None` (the init may have
+  failed before the controller existed). Leave actuators in a safe state on error.
 - Settings are `pyqtgraph` Parameter dicts (`{'title', 'name', 'type', 'value', ...}`). React to changes in
   `commit_settings(param)` by `param.name()`.
 - Units are `pint`-based. Give every actuator value and every `Axis` a unit; mismatches raise `DataUnitError`.

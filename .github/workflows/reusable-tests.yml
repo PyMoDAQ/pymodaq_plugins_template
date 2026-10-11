@@ -1,4 +1,7 @@
 # Shared by all plugins: flake8 gate and unit tests on one Python version and one Qt backend.
+# Deliberately a single configuration (Linux, Python 3.11, PySide6 by default): this is the fast gate that gives an
+# answer in about a minute. The spread over OS, Python versions and Qt backends is tested by reusable-compatibility.yml
+# (a subset that skips Python 3.11, which is thus covered here).
 # Called from the small `tests.yml` of a plugin, do not copy this file into a plugin.
 name: Reusable tests
 

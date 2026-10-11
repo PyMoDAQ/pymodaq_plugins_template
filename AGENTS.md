@@ -184,7 +184,8 @@ extensions already does the job and only the conversion of the measurements or o
   before the release that follows 5.3.3, so derive directly from it if you must support older releases).
 - The template ships no model on purpose. Start from the working examples of
   [`pymodaq_plugins_mockexamples`](https://github.com/PyMoDAQ/pymodaq_plugins_mockexamples) (`PIDModelBeamSteering`,
-  `PIDModelMockHeater`, `BayesianModelMock`, `DataMixerModelFit`) and from the page "Models of the extensions" of the
+  `PIDModelMockHeater`, `BayesianModelMock`, `DataMixerModelFit`; for the Sequencer, the choice models of
+  `pymodaq/extensions/sequencer/models`, which register with `@ChoiceModelFactory.register_choice()`) and from the page "Models of the extensions" of the
   PyMoDAQ documentation, which lists the methods to implement for each kind. Test a model with the mock actuators and
   detectors of that package.
 - Do not use the old `pid_models` flag nor the word "preset" in new code: a model script that opens the Dashboard loads

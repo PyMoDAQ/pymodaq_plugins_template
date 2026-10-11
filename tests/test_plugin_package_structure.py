@@ -1,4 +1,4 @@
-"""Acceptance tests of the plugin, provided by PyMoDAQ (from version 5.3.1).
+"""Acceptance tests of the plugin, provided by PyMoDAQ (from version 5.3.2).
 
 They check the package structure, the entry points, the naming of the instrument modules and classes, the mandatory
 attributes and methods of the plugin classes, and apply the static rules of PyMoDAQ on the sources
@@ -12,13 +12,13 @@ import importlib.util
 import pytest
 
 try:
-    available = importlib.util.find_spec('pymodaq_utils.plugin_testing') is not None
-except ModuleNotFoundError:  # pymodaq_utils is not installed
+    available = importlib.util.find_spec('pymodaq.utils.plugin_testing') is not None
+except ModuleNotFoundError:  # pymodaq is not installed
     available = False
 if not available:
-    pytest.skip('The plugin acceptance checks need PyMoDAQ >= 5.3.1', allow_module_level=True)
+    pytest.skip('The plugin acceptance checks need PyMoDAQ >= 5.3.2', allow_module_level=True)
 
-from pymodaq_utils.plugin_testing import PluginPackageChecks
+from pymodaq.utils.plugin_testing import PluginPackageChecks
 
 
 class TestPlugin(PluginPackageChecks):

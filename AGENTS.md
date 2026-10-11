@@ -21,6 +21,9 @@ Prefer the first option that fits:
    instruments** (data viewer, analysis, h5 browsing, configuration tools).
 4. A plain script, for a one-off sequence that does not need a GUI.
 
+A **model** (section 6) is not a separate option: it tailors an existing extension (PID, optimizers, data mixer,
+sequencer) to your experiment.
+
 ## 2. Workflow
 
 ```bash
@@ -167,7 +170,27 @@ and the deprecated `CustomApp` / `CustomExt` hooks `setup_docks` and `setup_menu
 Only when no instrument is needed. Same (non-deprecated) lifecycle as above, `parent` is a `DockArea` or `QMainWindow`, and
 `main()` creates the app with `mkQApp`. If instruments become necessary, move the logic to a `CustomExt`.
 
-## 6. Done checklist
+## 6. Models of the extensions (`models/`)
+
+Four Dashboard extensions delegate the part that depends on your experiment to a model class that your package
+provides: PID (`PIDModelGeneric`), Bayesian and Adaptive optimizers (`OptimizerModelGeneric` or `OptimizerModelDefault`),
+DataMixer (`DataMixerModel`) and the Sequencer (`ChoiceModelBase`). Write a model, not an extension, when one of these
+extensions already does the job and only the conversion of the measurements or of the outputs is specific.
+
+- Set `models = true` in `[features]`; entry points are generated only then (`pymodaq.models`).
+- Create the `models/` folder at the root of the package, one model per module; the module name is the name shown in
+  the extension. The model is the class defined in the module that derives from the base class of the extension (it may
+  derive from your own intermediate class; PID and DataMixer only accepted a direct subclass of the generic base
+  before the release that follows 5.3.3, so derive directly from it if you must support older releases).
+- The template ships no model on purpose. Start from the working examples of
+  [`pymodaq_plugins_mockexamples`](https://github.com/PyMoDAQ/pymodaq_plugins_mockexamples) (`PIDModelBeamSteering`,
+  `PIDModelMockHeater`, `BayesianModelMock`, `DataMixerModelFit`) and from the page "Models of the extensions" of the
+  PyMoDAQ documentation, which lists the methods to implement for each kind. Test a model with the mock actuators and
+  detectors of that package.
+- Do not use the old `pid_models` flag nor the word "preset" in new code: a model script that opens the Dashboard loads
+  an experiment file.
+
+## 7. Done checklist
 
 - [ ] Names (package, files, classes) match and the `template` placeholders are gone.
 - [ ] The `[features]` flags at the top of `pyproject.toml` match the folders you use (`instruments`, `extensions`,

@@ -76,6 +76,33 @@ class DAQ_Move_Template(DAQ_Move_base):
         #TODO declare here attributes you want/need to init with a default value
         pass
 
+    def ini_stage(self, controller=None):
+        """Actuator communication initialization
+
+        Parameters
+        ----------
+        controller: (object)
+            custom object of a PyMoDAQ plugin (Slave case). None if only one actuator by controller (Master case)
+
+        Returns
+        -------
+        info: str
+        initialized: bool
+            False if initialization failed otherwise True
+        """
+        raise NotImplementedError  # TODO when writing your own plugin remove this line and modify the ones below
+        if self.is_master:  # is needed when controller is master
+            self.controller = PythonWrapperObjectOfYourInstrument()  # TODO add the arguments for the instantiation
+            initialized = self.controller.a_method_or_atttribute_to_check_if_init()  # todo
+            # todo: enter here whatever is needed for your controller initialization and eventual
+            #  opening of the communication channel
+        else:
+            self.controller = controller
+            initialized = True
+
+        info = "Whatever info you want to log"
+        return info, initialized
+
     def get_actuator_value(self) -> DataActuator:
         """Get the current value from the hardware with scaling conversion.
 
@@ -103,61 +130,6 @@ class DAQ_Move_Template(DAQ_Move_base):
         #  using or/and operations between the epsilon_bool and some other custom booleans
         #  for a usage example see DAQ_Move_brushlessMotor from the Thorlabs plugin
         return True
-
-    def close(self):
-        """Terminate the communication protocol"""
-        ## TODO for your custom plugin
-        raise NotImplementedError  # when writing your own plugin remove this line
-        if self.is_master:
-            #  self.controller.your_method_to_terminate_the_communication()  # when writing your own plugin replace this line
-            ...
-
-    def commit_settings(self, param: Parameter):
-        """Apply the consequences of a change of value in the detector settings
-
-        Parameters
-        ----------
-        param: Parameter
-            A given parameter (within detector_settings) whose value has been changed by the user
-        """
-        ## TODO for your custom plugin
-        if param.name() == 'axis':
-            self.axis_unit = self.controller.your_method_to_get_correct_axis_unit()
-            # do this only if you can and if the units are not known beforehand, for instance
-            # if the motors connected to the controller are of different type (mm, µm, nm, , etc...)
-            # see BrushlessDCMotor from the thorlabs plugin for an exemple
-
-        elif param.name() == "a_parameter_you've_added_in_self.params":
-           self.controller.your_method_to_apply_this_param_change()
-        else:
-            pass
-
-    def ini_stage(self, controller=None):
-        """Actuator communication initialization
-
-        Parameters
-        ----------
-        controller: (object)
-            custom object of a PyMoDAQ plugin (Slave case). None if only one actuator by controller (Master case)
-
-        Returns
-        -------
-        info: str
-        initialized: bool
-            False if initialization failed otherwise True
-        """
-        raise NotImplementedError  # TODO when writing your own plugin remove this line and modify the ones below
-        if self.is_master:  # is needed when controller is master
-            self.controller = PythonWrapperObjectOfYourInstrument()  # TODO add the arguments for the instantiation
-            initialized = self.controller.a_method_or_atttribute_to_check_if_init()  # todo
-            # todo: enter here whatever is needed for your controller initialization and eventual
-            #  opening of the communication channel
-        else:
-            self.controller = controller
-            initialized = True
-
-        info = "Whatever info you want to log"
-        return info, initialized
 
     def move_abs(self, value: DataActuator):
         """ Move the actuator to the absolute target defined by value
@@ -217,6 +189,34 @@ class DAQ_Move_Template(DAQ_Move_base):
         raise NotImplementedError  # when writing your own plugin remove this line
         self.controller.your_method_to_stop_positioning()  # when writing your own plugin replace this line
         self.emit_status(ThreadCommand('Update_Status', ['Some info you want to log']))
+
+    def commit_settings(self, param: Parameter):
+        """Apply the consequences of a change of value in the detector settings
+
+        Parameters
+        ----------
+        param: Parameter
+            A given parameter (within detector_settings) whose value has been changed by the user
+        """
+        ## TODO for your custom plugin
+        if param.name() == 'axis':
+            self.axis_unit = self.controller.your_method_to_get_correct_axis_unit()
+            # do this only if you can and if the units are not known beforehand, for instance
+            # if the motors connected to the controller are of different type (mm, µm, nm, , etc...)
+            # see BrushlessDCMotor from the thorlabs plugin for an exemple
+
+        elif param.name() == "a_parameter_you've_added_in_self.params":
+           self.controller.your_method_to_apply_this_param_change()
+        else:
+            pass
+
+    def close(self):
+        """Terminate the communication protocol"""
+        ## TODO for your custom plugin
+        raise NotImplementedError  # when writing your own plugin remove this line
+        if self.is_master:
+            #  self.controller.your_method_to_terminate_the_communication()  # when writing your own plugin replace this line
+            ...
 
 
 if __name__ == '__main__':

@@ -54,20 +54,6 @@ class DAQ_0DViewer_Template(DAQ_Viewer_base):
         #TODO declare here attributes you want/need to init with a default value
         pass
 
-    def commit_settings(self, param: Parameter):
-        """Apply the consequences of a change of value in the detector settings
-
-        Parameters
-        ----------
-        param: Parameter
-            A given parameter (within detector_settings) whose value has been changed by the user
-        """
-        ## TODO for your custom plugin
-        if param.name() == "a_parameter_you've_added_in_self.params":
-           self.controller.your_method_to_apply_this_param_change()  # when writing your own plugin replace this line
-#        elif ...
-        ##
-
     def ini_detector(self, controller=None):
         """Detector communication initialization
 
@@ -103,14 +89,6 @@ class DAQ_0DViewer_Template(DAQ_Viewer_base):
         info = "Whatever info you want to log"
         return info, initialized
 
-    def close(self):
-        """Terminate the communication protocol"""
-        ## TODO for your custom plugin
-        raise NotImplementedError  # when writing your own plugin remove this line
-        if self.is_master:
-            #  self.controller.your_method_to_terminate_the_communication()  # when writing your own plugin replace this line
-            ...
-
     def grab_data(self, Naverage=1, **kwargs):
         """Start a grab from the detector
 
@@ -137,7 +115,6 @@ class DAQ_0DViewer_Template(DAQ_Viewer_base):
         self.controller.your_method_to_start_a_grab_snap(self.callback)  # when writing your own plugin replace this line
         #########################################################
 
-
     def callback(self):
         """optional asynchrone method called when the detector has finished its acquisition of data"""
         data_tot = self.controller.your_method_to_get_data_from_buffer()
@@ -153,6 +130,28 @@ class DAQ_0DViewer_Template(DAQ_Viewer_base):
         self.emit_status(ThreadCommand('Update_Status', ['Some info you want to log']))
         ##############################
         return ''
+
+    def commit_settings(self, param: Parameter):
+        """Apply the consequences of a change of value in the detector settings
+
+        Parameters
+        ----------
+        param: Parameter
+            A given parameter (within detector_settings) whose value has been changed by the user
+        """
+        ## TODO for your custom plugin
+        if param.name() == "a_parameter_you've_added_in_self.params":
+           self.controller.your_method_to_apply_this_param_change()  # when writing your own plugin replace this line
+#        elif ...
+        ##
+
+    def close(self):
+        """Terminate the communication protocol"""
+        ## TODO for your custom plugin
+        raise NotImplementedError  # when writing your own plugin remove this line
+        if self.is_master:
+            #  self.controller.your_method_to_terminate_the_communication()  # when writing your own plugin replace this line
+            ...
 
 
 if __name__ == '__main__':

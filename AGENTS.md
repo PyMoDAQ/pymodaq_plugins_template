@@ -49,8 +49,9 @@ plugin, look it up in the installed `pymodaq` package instead of guessing.
 File and class names must match: `daq_move_<Name>.py` holds `DAQ_Move_<Name>`; `daq_<N>Dviewer_<Name>.py` holds
 `DAQ_<N>DViewer_<Name>` (N = 0, 1, 2 or N). Each file ends with `if __name__ == '__main__': main(__file__)`.
 
-**Actuator** (`DAQ_Move_base`). Override at least `ini_attributes`, `ini_stage`, `get_actuator_value`, `close`,
-`commit_settings`, `move_abs`, `move_rel`, `move_home`, `stop_motion`.
+**Actuator** (`DAQ_Move_base`). Override at least, in the order of the template (the order in which to develop them),
+`ini_attributes`, `ini_stage`, `get_actuator_value`, `move_abs`, `move_rel`, `move_home`, `stop_motion`,
+`commit_settings`, `close`.
 
 - `ini_stage(controller=None)` returns `(info: str, initialized: bool)`. If `self.is_master`, create the controller;
   otherwise store the `controller` passed in (several axes share one controller).
@@ -63,8 +64,8 @@ File and class names must match: `daq_move_<Name>.py` holds `DAQ_Move_<Name>`; `
 - Positions are `DataActuator` objects with **units** (`units=self.axis_unit`); use `check_bound`,
   `set_position_with_scaling` and `get_position_with_scaling` as in the template.
 
-**Detector** (`DAQ_Viewer_base`). Override at least `ini_attributes`, `ini_detector`, `grab_data`, `stop`,
-`close`, `commit_settings`.
+**Detector** (`DAQ_Viewer_base`). Override at least, in the order of the template, `ini_attributes`, `ini_detector`,
+`grab_data`, `stop`, `commit_settings`, `close`.
 
 - `ini_detector(controller=None)` returns `(info, initialized)`, same master/slave logic.
 - `params = comon_parameters + [...]`.
@@ -155,8 +156,9 @@ and the deprecated `CustomApp` / `CustomExt` hooks `setup_docks` and `setup_menu
   each extension by the base class `__init__`, so that every extension can handle different instruments: never share
   it between extensions, replace it, or reuse the Dashboard's one. Do not create control modules yourself inside an
   extension, and do not talk to the hardware directly.
-- Implement the lifecycle: `setup_docks_and_widgets`, `setup_actions`, `setup_menus_and_toolbars`,
-  `connect_things`, `value_changed`, `quit_fun`. `setup_docks` and `setup_menu` are deprecated. The GUI thread runs
+- Implement the lifecycle, in the order `setup_ui` calls it: `setup_docks_and_widgets`, `setup_menus_and_toolbars`
+  (only creates the menus and toolbars), `setup_actions` (creates the actions and can put them in those menus and
+  toolbars with `add_action(..., menu=..., toolbar=...)`), `connect_things`, then `value_changed`, `quit_fun`. `setup_docks` and `setup_menu` are deprecated. The GUI thread runs
   your code; react to module signals, never poll or sleep.
 
 ## 5. Standalone apps (`CustomApp`)

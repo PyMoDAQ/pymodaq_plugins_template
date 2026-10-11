@@ -51,6 +51,25 @@ class CustomAppTemplate(gutils.CustomApp):
         self.dockarea.addDock(self.docks['settings'])
         self.docks['settings'].addWidget(self.settings_tree)
 
+    def setup_menus_and_toolbars(self, menubar: QtWidgets.QMenuBar = None):
+        """Non mandatory method to be subclassed in order to create menus and toolbars
+
+        It is called before setup_actions: only create the (empty) menus and toolbars here, the actions are created
+        afterwards in setup_actions where they can be put in them, for instance:
+
+        Examples
+        --------
+        >>> self.add_menu('file', 'File', parent_menu=menubar)  # here
+        >>> self.add_toolbar('main', 'Main toolbar', self.mainwindow)  # here
+        >>> self.add_action('save', 'Save', 'SaveAs', "Save current data", menu='file', toolbar='main')  # in setup_actions
+
+        See Also
+        --------
+        pymodaq_gui.managers.action_manager.ActionManager
+        """
+        # todo create the menus and toolbars of your app here (they will be populated by the actions of setup_actions)
+        pass
+
     def setup_actions(self):
         """Method where to create actions to be subclassed
 
@@ -73,27 +92,6 @@ class CustomAppTemplate(gutils.CustomApp):
         """Connect actions and/or other widgets signal to methods"""
         # todo: replace this example by your connections
         self.connect_action('say_hello', lambda: self.update_status('Hello'))
-
-    def setup_menus_and_toolbars(self, menubar: QtWidgets.QMenuBar = None):
-        """Non mandatory method to be subclassed in order to create menus and toolbars
-
-        create menu for actions contained into the self._actions, for instance:
-
-        Examples
-        --------
-        >>>file_menu = menubar.addMenu('File')
-        >>>self.affect_to('load', file_menu)
-        >>>self.affect_to('save', file_menu)
-
-        >>>file_menu.addSeparator()
-        >>>self.affect_to('quit', file_menu)
-
-        See Also
-        --------
-        pymodaq.utils.managers.action_manager.ActionManager
-        """
-        # todo create and populate menu using actions defined above in self.setup_actions
-        pass
 
     def value_changed(self, param):
         """ Actions to perform when one of the param's value in self.settings is changed from the

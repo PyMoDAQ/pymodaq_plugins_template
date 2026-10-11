@@ -126,7 +126,7 @@ the settings tree (`params`, `settings`, `value_changed`), the dock area, the st
 (`ExtensionWorker`) runs in its own thread with a `SaverWorker`; talk to workers with signals only. Two patterns: a standalone app
 (`CustomApp`, no instrument) or a Dashboard extension (`CustomExt`, any use of instruments); embedding control modules in
 a `CustomApp` is possible but not advised. They are drawn, with text versions, in the PyMoDAQ
-documentation page "Custom App" (`docs/src/developer_folder/custom_app.rst`).
+documentation page "CustomApp and CustomExt" (`docs/src/developer_folder/custom_app.rst`).
 
 - Entry point group `pymodaq.extensions` in `pyproject.toml`; each module in `extensions/` defines
   `EXTENSION_NAME` (menu label), `CLASS_NAME` (class name) and a class derived from `CustomExt`.

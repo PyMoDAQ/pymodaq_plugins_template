@@ -15,6 +15,15 @@ jobs:
     timeout-minutes: 30
     strategy:
       fail-fast: false
+      # This matrix is a deliberate subset, not every combination of OS x Python x Qt backend (2 x 4 x 3 = 24 jobs).
+      # It follows the usual practice of testing the extremes instead of the full cross product:
+      #  - the oldest (3.10) and the newest (3.13) supported Python versions, on Linux,
+      #  - each Qt backend at least once (pyqt5, pyqt6, pyside6), PySide6 on both Python extremes,
+      #  - Windows once, with an intermediate Python version (3.12).
+      # Not tested on purpose: Python 3.11 and 3.12 on Linux, Windows with pyqt5 or pyside6, PyQt5 with Python 3.13,
+      # PyQt6 with Python 3.10. The plugin tests are fast, so if a plugin needs more coverage, replace `include` by the
+      # three lists `os`, `python-version` and `qt-backend`: GitHub then builds the 24 combinations.
+      # When a Python version is added or dropped (follow pymodaq), update the extremes here.
       matrix:
         include:
           - {os: ubuntu-latest, python-version: '3.10', qt-backend: pyqt5}

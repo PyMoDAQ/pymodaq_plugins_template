@@ -1,0 +1,7 @@
+# Template repository only: keeps the pinned versions of the GitHub actions up to date (as pull requests).
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly

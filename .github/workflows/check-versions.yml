@@ -1,0 +1,30 @@
+# Template repository only: warns (failed run, e-mail to the watchers) when the versions written in the template drift
+# from PyMoDAQ's, for instance after a new PyMoDAQ minor release. Plugins copied from the template skip it.
+name: Check template versions
+
+on:
+  schedule:
+    - cron: '0 6 * * 1'
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - pyproject.toml
+      - README.rst
+      - AGENTS.md
+      - .github/workflows/**
+      - .github/scripts/**
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    if: github.repository == 'PyMoDAQ/pymodaq_plugins_template'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v6.0.3
+      - uses: actions/setup-python@v6.2.0
+        with:
+          python-version: '3.12'
+      - run: python .github/scripts/check_template_versions.py

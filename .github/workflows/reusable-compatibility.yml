@@ -34,7 +34,7 @@ jobs:
     env:
       QT_DEBUG_PLUGINS: 1
     steps:
-      - uses: actions/checkout@v6.0.3
+      - uses: actions/checkout@v7.0.1
       - uses: actions/setup-python@v6.2.0
         with:
           python-version: ${{ matrix.python-version }}

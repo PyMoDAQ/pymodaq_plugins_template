@@ -179,14 +179,16 @@ extensions already does the job and only the conversion of the measurements or o
 
 - Set `models = true` in `[features]`; entry points are generated only then (`pymodaq.models`).
 - Create the `models/` folder at the root of the package, one model per module; the module name is the name shown in
-  the extension. The model is the class defined in the module that derives from the base class of the extension (the
-  Sequencer instead registers its choice models with `@ChoiceModelFactory.register_choice()`; it may
-  derive from your own intermediate class; PID and DataMixer only accepted a direct subclass of the generic base
-  before the release that follows 5.3.3, so derive directly from it if you must support older releases).
+  the extension. The model is the class defined in the module that derives from the base class of the extension. It may
+  derive from your own intermediate class, but PID and DataMixer only accepted a direct subclass of the generic base
+  before the release that follows 5.3.3, so derive directly from it if you must support older releases. The Sequencer
+  is the exception: it does not look at base classes, you register each choice model with
+  `@ChoiceModelFactory.register_choice()`.
 - The template ships no model on purpose. Start from the working examples of
   [`pymodaq_plugins_mockexamples`](https://github.com/PyMoDAQ/pymodaq_plugins_mockexamples) (`PIDModelBeamSteering`,
   `PIDModelMockHeater`, `BayesianModelMock`, `DataMixerModelFit`; for the Sequencer, the choice models of
-  `pymodaq/extensions/sequencer/models`) and from the page "Models of the extensions" of the PyMoDAQ documentation, which lists the methods to implement for each kind. Test a model with the mock actuators and
+  `pymodaq/extensions/sequencer/models`) and from the page "Models of the extensions" of the PyMoDAQ
+  documentation, which lists the methods to implement for each kind. Test a model with the mock actuators and
   detectors of that package.
 - Do not use the old `pid_models` flag nor the word "preset" in new code: a model script that opens the Dashboard loads
   an experiment file.

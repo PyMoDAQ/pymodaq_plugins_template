@@ -1,4 +1,4 @@
-# Everything is defined once in PyMoDAQ/pymodaq_plugins_template (reusable-*.yml). The ref after @ is the 5.3.x branch for now: use a release tag (@v1) once it exists.
+# Everything is defined once in PyMoDAQ/pymodaq_plugins_template (reusable-*.yml). The template is never released, so the ref after @ is its 5.3.x branch.
 name: Upload Python Package
 
 on:

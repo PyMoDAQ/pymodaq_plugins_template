@@ -1,4 +1,4 @@
-# Everything is defined once in PyMoDAQ/pymodaq_plugins_template (reusable-*.yml). The ref after @ is the branch of the PR for now: use a release tag (@v1) once it exists.
+# Everything is defined once in PyMoDAQ/pymodaq_plugins_template (reusable-*.yml). The ref after @ is the 5.3.x branch for now: use a release tag (@v1) once it exists.
 name: Upload Python Package
 
 on:
@@ -7,5 +7,5 @@ on:
 
 jobs:
   publish:
-    uses: PyMoDAQ/pymodaq_plugins_template/.github/workflows/reusable-publish.yml@agent-md
+    uses: PyMoDAQ/pymodaq_plugins_template/.github/workflows/reusable-publish.yml@5.3.x
     secrets: inherit

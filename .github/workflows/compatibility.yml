@@ -1,4 +1,4 @@
-# Everything is defined once in PyMoDAQ/pymodaq_plugins_template (reusable-*.yml). The ref after @ is the branch of the PR for now: use a release tag (@v1) once it exists.
+# Everything is defined once in PyMoDAQ/pymodaq_plugins_template (reusable-*.yml). The ref after @ is the 5.3.x branch for now: use a release tag (@v1) once it exists.
 name: Compatibility with pymodaq (latest release)
 
 on:
@@ -12,4 +12,4 @@ concurrency:
 
 jobs:
   compatibility:
-    uses: PyMoDAQ/pymodaq_plugins_template/.github/workflows/reusable-compatibility.yml@agent-md
+    uses: PyMoDAQ/pymodaq_plugins_template/.github/workflows/reusable-compatibility.yml@5.3.x

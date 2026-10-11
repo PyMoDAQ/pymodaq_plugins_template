@@ -49,6 +49,10 @@ class DAQ_Move_Fake(DAQ_Move_base):
         self.controller = FakeController() if self.is_master else controller
         return 'fake stage ready', True
 
+    def close(self):
+        if self.is_master and self.controller is not None:
+            self.controller.close()
+
     def get_actuator_value(self) -> DataActuator:
         pos = DataActuator(data=self.controller.get_position(), units=self.axis_unit)
         return self.get_position_with_scaling(pos)
@@ -57,13 +61,13 @@ class DAQ_Move_Fake(DAQ_Move_base):
         value = self.check_bound(value)
         self.target_value = value
         value = self.set_position_with_scaling(value)
-        self.controller.move_at(value.value())
+        self.controller.move_at(value.value(self.axis_unit))  # in the controller unit, see the template
 
     def move_rel(self, value: DataActuator):
         value = self.check_bound(self.current_value + value) - self.current_value
         self.target_value = value + self.current_value
         value = self.set_position_with_scaling(self.target_value)
-        self.controller.move_at(value.value())
+        self.controller.move_at(value.value(self.axis_unit))  # in the controller unit, see the template
 
     def move_home(self):
         self.move_abs(DataActuator(data=0., units=self.axis_unit))
@@ -73,10 +77,6 @@ class DAQ_Move_Fake(DAQ_Move_base):
 
     def commit_settings(self, param):
         pass
-
-    def close(self):
-        if self.is_master:
-            self.controller.close()
 
 
 class DAQ_MultiAxes_Fake(DAQ_Move_Fake):
@@ -100,8 +100,9 @@ class DAQ_1DViewer_Fake(DAQ_Viewer_base):
         self.controller = FakeController() if self.is_master else controller
         return 'fake detector ready', True
 
-    def commit_settings(self, param):
-        pass
+    def close(self):
+        if self.is_master and self.controller is not None:
+            self.controller.close()
 
     def grab_data(self, Naverage=1, **kwargs):
         y = self.controller.acquire(self.settings['npts'])
@@ -109,6 +110,5 @@ class DAQ_1DViewer_Fake(DAQ_Viewer_base):
             name='fake',
             data=[DataFromPlugins(name='trace', data=[y], dim='Data1D', labels=['signal'], units='V')]))
 
-    def close(self):
-        if self.is_master:
-            self.controller.close()
+    def commit_settings(self, param):
+        pass

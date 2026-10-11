@@ -1,0 +1,8 @@
+# Everything is defined once in PyMoDAQ/pymodaq_plugins_template (reusable-*.yml). The ref after @ is the branch of the PR for now: use a release tag (@v1) once it exists.
+name: Tests
+
+on: [push, pull_request]
+
+jobs:
+  tests:
+    uses: PyMoDAQ/pymodaq_plugins_template/.github/workflows/reusable-tests.yml@agent-md

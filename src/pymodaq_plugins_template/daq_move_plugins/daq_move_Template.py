@@ -46,14 +46,16 @@ class DAQ_Move_Template(DAQ_Move_base):
     _axis_names: Union[List[str], Dict[str, int]] = ['Axis1', 'Axis2']  # TODO for your plugin: complete the list
     _controller_units: Union[str, List[str]] = 'mm'  # TODO for your plugin: put the correct unit here, it could be
     # TODO  a single str (the same one is applied to all axes) or a list of str (as much as the number of axes)
-    _epsilon: Union[float, List[float]] = 0.1  # TODO replace this by a value that is correct depending on your controller
+    _epsilons: Union[float, List[float]] = 0.1  # TODO replace this by a value that is correct depending on your controller
     # TODO it could be a single float of a list of float (as much as the number of axes)
-    # _epsilon is the initial default value for the epsilon parameter allowing pymodaq to know if the controller reached
+    # _epsilons is the initial default value for the epsilon parameter allowing pymodaq to know if the controller reached
     # the target value. It is the developer responsibility to put here a meaningful value
 
 
-    data_actuator_type = DataActuatorType.DataActuator  # wether you use the new data style for actuator otherwise set this
-    # as  DataActuatorType.float  (or entirely remove the line)
+    data_actuator_type = DataActuatorType.DataActuator  # keep this line: move_abs / move_rel receive a DataActuator (with
+    # units) and get_actuator_value returns one. The default of the PyMoDAQ base class is DataActuatorType.float, only
+    # kept for old plugins (a plain float in the axis unit is exchanged instead): do not remove this line, and do not
+    # use DataActuatorType.float in a new plugin.
 
     #todo: set the correct values for these two variables (pymodaq>5.3.0 only, if developing using lower version, just
     # remove the two lines)
@@ -64,7 +66,7 @@ class DAQ_Move_Template(DAQ_Move_base):
 
 
     params = [   # TODO for your custom plugin: elements to be added here as dicts in order to control your custom stage
-                ] + comon_parameters_fun(is_multiaxes, axis_names=_axis_names, epsilon=_epsilon)
+                ] + comon_parameters_fun(axis_names=_axis_names)
 
     def ini_attributes(self):
         #  TODO declare the type of the wrapper (and assign it to self.controller) you're going to use for easy
@@ -73,6 +75,43 @@ class DAQ_Move_Template(DAQ_Move_base):
 
         #TODO declare here attributes you want/need to init with a default value
         pass
+
+    def ini_stage(self, controller=None):
+        """Actuator communication initialization
+
+        Parameters
+        ----------
+        controller: (object)
+            custom object of a PyMoDAQ plugin (Slave case). None if only one actuator by controller (Master case)
+
+        Returns
+        -------
+        info: str
+        initialized: bool
+            False if initialization failed otherwise True
+        """
+        raise NotImplementedError  # TODO when writing your own plugin remove this line and modify the ones below
+        if self.is_master:  # is needed when controller is master
+            self.controller = PythonWrapperObjectOfYourInstrument()  # TODO add the arguments for the instantiation
+            initialized = self.controller.a_method_or_atttribute_to_check_if_init()  # todo
+            # todo: enter here whatever is needed for your controller initialization and eventual
+            #  opening of the communication channel
+        else:
+            self.controller = controller
+            initialized = True
+
+        info = "Whatever info you want to log"
+        return info, initialized
+
+    def close(self):
+        """Terminate the communication protocol"""
+        ## TODO for your custom plugin
+        raise NotImplementedError  # when writing your own plugin remove this line
+        # only the master owns the controller (a slave must not close the shared one) and ini_stage/ini_detector may
+        # have failed before creating it, so close can be called while self.controller is still None
+        if self.is_master and self.controller is not None:
+            #  self.controller.your_method_to_terminate_the_communication()  # when writing your own plugin replace this line
+            ...
 
     def get_actuator_value(self) -> DataActuator:
         """Get the current value from the hardware with scaling conversion.
@@ -102,13 +141,64 @@ class DAQ_Move_Template(DAQ_Move_base):
         #  for a usage example see DAQ_Move_brushlessMotor from the Thorlabs plugin
         return True
 
-    def close(self):
-        """Terminate the communication protocol"""
+    def move_abs(self, value: DataActuator):
+        """ Move the actuator to the absolute target defined by value
+
+        Parameters
+        ----------
+        value: DataActuator
+            Absolute target, with units. (With the backcompatibility DataActuatorType.float it would be a plain float,
+            already expressed in the axis unit, but new plugins should not use it.)
+        """
+
+        value = self.check_bound(value)  #if user checked bounds, the defined bounds are applied here
+        self.target_value = value
+        value = self.set_position_with_scaling(value)  # apply scaling if the user specified one
+        ## TODO for your custom plugin
+        # IMPORTANT: the controller only understands its own units. Always send value.value(self.axis_unit), it returns
+        # the magnitude expressed in the unit of this axis (the one of _controller_units, 'mm' here). PyMoDAQ already
+        # converts the target to the axis unit before calling move_abs, but value.value() alone is just the magnitude
+        # in whatever unit `value` carries (1 cm gives 1.0, not 10.0): value.value(self.axis_unit) guards against a
+        # mistake, and keeps the plugin correct when move_abs is called from elsewhere with another unit.
+        # (axis_unit is the unit of the current axis, axis_units the list/dict of the units of all the axes.)
+        raise NotImplementedError  # when writing your own plugin remove this line
+        self.controller.your_method_to_set_an_absolute_value(value.value(self.axis_unit))  # when writing your own plugin replace this line
+        self.emit_status(ThreadCommand('Update_Status', ['Some info you want to log']))
+
+    def move_rel(self, value: DataActuator):
+        """ Move the actuator to the relative target actuator value defined by value
+
+        Parameters
+        ----------
+        value: DataActuator
+            Relative displacement, with units (convert it with value.value(self.axis_unit) before sending it to the
+            controller, see move_abs).
+        """
+        value = self.check_bound(self.current_value + value) - self.current_value
+        self.target_value = value + self.current_value
+        value = self.set_position_relative_with_scaling(value)
+
+        ## TODO for your custom plugin
+        # IMPORTANT: send value.value(self.axis_unit), not value.value(): the controller only understands its own units
+        raise NotImplementedError  # when writing your own plugin remove this line
+        self.controller.your_method_to_set_a_relative_value(value.value(self.axis_unit))  # when writing your own plugin replace this line
+        self.emit_status(ThreadCommand('Update_Status', ['Some info you want to log']))
+
+    def move_home(self):
+        """Call the reference method of the controller"""
+
         ## TODO for your custom plugin
         raise NotImplementedError  # when writing your own plugin remove this line
-        if self.is_master:
-            #  self.controller.your_method_to_terminate_the_communication()  # when writing your own plugin replace this line
-            ...
+        self.controller.your_method_to_get_to_a_known_reference()  # when writing your own plugin replace this line
+        self.emit_status(ThreadCommand('Update_Status', ['Some info you want to log']))
+
+    def stop_motion(self):
+        """Stop the actuator and emits move_done signal"""
+
+        ## TODO for your custom plugin
+        raise NotImplementedError  # when writing your own plugin remove this line
+        self.controller.your_method_to_stop_positioning()  # when writing your own plugin replace this line
+        self.emit_status(ThreadCommand('Update_Status', ['Some info you want to log']))
 
     def commit_settings(self, param: Parameter):
         """Apply the consequences of a change of value in the detector settings
@@ -129,81 +219,6 @@ class DAQ_Move_Template(DAQ_Move_base):
            self.controller.your_method_to_apply_this_param_change()
         else:
             pass
-
-    def ini_stage(self, controller=None):
-        """Actuator communication initialization
-
-        Parameters
-        ----------
-        controller: (object)
-            custom object of a PyMoDAQ plugin (Slave case). None if only one actuator by controller (Master case)
-
-        Returns
-        -------
-        info: str
-        initialized: bool
-            False if initialization failed otherwise True
-        """
-        raise NotImplementedError  # TODO when writing your own plugin remove this line and modify the ones below
-        if self.is_master:  # is needed when controller is master
-            self.controller = PythonWrapperObjectOfYourInstrument()  # TODO add the arguments for the instantiation
-            initialized = self.controller.a_method_or_atttribute_to_check_if_init()  # todo
-            # todo: enter here whatever is needed for your controller initialization and eventual
-            #  opening of the communication channel
-        else:
-            self.controller = controller
-            initialized = True
-
-        info = "Whatever info you want to log"
-        return info, initialized
-
-    def move_abs(self, value: DataActuator):
-        """ Move the actuator to the absolute target defined by value
-
-        Parameters
-        ----------
-        value: (float) value of the absolute target positioning
-        """
-
-        value = self.check_bound(value)  #if user checked bounds, the defined bounds are applied here
-        self.target_value = value
-        value = self.set_position_with_scaling(value)  # apply scaling if the user specified one
-        ## TODO for your custom plugin
-        raise NotImplementedError  # when writing your own plugin remove this line
-        self.controller.your_method_to_set_an_absolute_value(value.value(self.axis_unit))  # when writing your own plugin replace this line
-        self.emit_status(ThreadCommand('Update_Status', ['Some info you want to log']))
-
-    def move_rel(self, value: DataActuator):
-        """ Move the actuator to the relative target actuator value defined by value
-
-        Parameters
-        ----------
-        value: (float) value of the relative target positioning
-        """
-        value = self.check_bound(self.current_value + value) - self.current_value
-        self.target_value = value + self.current_value
-        value = self.set_position_relative_with_scaling(value)
-
-        ## TODO for your custom plugin
-        raise NotImplementedError  # when writing your own plugin remove this line
-        self.controller.your_method_to_set_a_relative_value(value.value(self.axis_unit))  # when writing your own plugin replace this line
-        self.emit_status(ThreadCommand('Update_Status', ['Some info you want to log']))
-
-    def move_home(self):
-        """Call the reference method of the controller"""
-
-        ## TODO for your custom plugin
-        raise NotImplementedError  # when writing your own plugin remove this line
-        self.controller.your_method_to_get_to_a_known_reference()  # when writing your own plugin replace this line
-        self.emit_status(ThreadCommand('Update_Status', ['Some info you want to log']))
-
-    def stop_motion(self):
-        """Stop the actuator and emits move_done signal"""
-
-        ## TODO for your custom plugin
-        raise NotImplementedError  # when writing your own plugin remove this line
-        self.controller.your_method_to_stop_positioning()  # when writing your own plugin replace this line
-        self.emit_status(ThreadCommand('Update_Status', ['Some info you want to log']))
 
 
 if __name__ == '__main__':

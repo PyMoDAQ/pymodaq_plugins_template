@@ -1,0 +1,54 @@
+# Shared by all plugins: the plugin tests on the latest PyMoDAQ release over Python versions, Qt backends and OS.
+# Called from the small `compatibility.yml` of a plugin, do not copy this file into a plugin.
+name: Reusable compatibility
+
+on:
+  workflow_call:
+
+permissions:
+  contents: read
+
+jobs:
+  tests:
+    name: ${{ matrix.os }} / Python ${{ matrix.python-version }} / ${{ matrix.qt-backend }}
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      # This matrix is a deliberate subset, not every combination of OS x Python x Qt backend (2 x 4 x 3 = 24 jobs).
+      # It follows the usual practice of testing the extremes instead of the full cross product:
+      #  - the oldest (3.10) and the newest (3.13) supported Python versions, on Linux,
+      #  - each Qt backend at least once (pyqt5, pyqt6, pyside6), PySide6 on both Python extremes,
+      #  - Windows once, with an intermediate Python version (3.12).
+      # Not tested on purpose: Python 3.11 and 3.12 on Linux, Windows with pyqt5 or pyside6, PyQt5 with Python 3.13,
+      # PyQt6 with Python 3.10. The plugin tests are fast, so if a plugin needs more coverage, replace `include` by the
+      # three lists `os`, `python-version` and `qt-backend`: GitHub then builds the 24 combinations.
+      # When a Python version is added or dropped (follow pymodaq), update the extremes here.
+      matrix:
+        include:
+          - {os: ubuntu-latest, python-version: '3.10', qt-backend: pyqt5}
+          - {os: ubuntu-latest, python-version: '3.10', qt-backend: pyside6}
+          - {os: ubuntu-latest, python-version: '3.13', qt-backend: pyqt6}
+          - {os: ubuntu-latest, python-version: '3.13', qt-backend: pyside6}
+          - {os: windows-latest, python-version: '3.12', qt-backend: pyqt6}
+    env:
+      QT_DEBUG_PLUGINS: 1
+    steps:
+      - uses: actions/checkout@v6.0.3
+      - uses: actions/setup-python@v6.2.0
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install system libraries for Qt
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libxkbcommon-x11-0 libxcb-icccm4 libxcb-image0 libxcb-keysyms1 libxcb-cursor0 libxcb-randr0 libxcb-render-util0 libxcb-xinerama0 libxcb-xfixes0 x11-utils libgl1 libegl1
+          sudo mkdir -p /etc/.pymodaq
+          sudo chmod uo+rw /etc/.pymodaq
+      - name: Install the plugin with the latest PyMoDAQ release
+        run: |
+          python -m pip install --upgrade pip
+          pip install pytest pytest-qt pytest-xvfb ${{ matrix.qt-backend }}
+          pip install -e .
+      - name: Tests
+        run: pytest -vv tests

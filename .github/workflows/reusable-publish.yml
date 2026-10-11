@@ -1,0 +1,41 @@
+# Shared by all plugins: build the package and upload it to PyPI.
+# The repository secrets PYPI_USERNAME (`__token__`) and PYPI_PASSWORD (the PyPI API token) are passed by the caller.
+# Called from the small `python-publish.yml` of a plugin, do not copy this file into a plugin.
+name: Reusable publish
+
+on:
+  workflow_call:
+    secrets:
+      PYPI_USERNAME:
+        required: true
+      PYPI_PASSWORD:
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6.0.3
+        with:
+          fetch-depth: 0  # history and tags, needed by hatch-vcs for the version
+      - uses: actions/setup-python@v6.2.0
+        with:
+          python-version: '3.x'
+      - name: Install build tools
+        run: |
+          python -m pip install --upgrade pip
+          pip install hatch hatchling toml twine
+      - name: Show the version
+        run: hatch version
+      - name: Build
+        run: hatch build
+      - name: Check the build
+        run: twine check dist/*
+      - name: Publish
+        env:
+          HATCH_INDEX_USER: ${{ secrets.PYPI_USERNAME }}
+          HATCH_INDEX_AUTH: ${{ secrets.PYPI_PASSWORD }}
+        run: hatch publish

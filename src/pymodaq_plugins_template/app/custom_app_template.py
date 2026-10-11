@@ -1,16 +1,20 @@
+"""Template of a standalone application, for applications that need NO instruments.
+
+If your application drives instruments (actuators, detectors), write a Dashboard extension (CustomExt, see the
+extensions folder) instead: it relies on the Dashboard's stable mechanisms to handle instruments (experiment and
+state managers, modules manager...).
+"""
 from qtpy import QtWidgets
 
 from pymodaq_gui import utils as gutils
-from pymodaq_utils.config import Config
+from pymodaq_utils.config import GlobalConfig
 from pymodaq_utils.logger import set_logger, get_module_name
-
-# todo: replace here *pymodaq_plugins_template* by your plugin package name
-from pymodaq_plugins_template.utils import Config as PluginConfig
 
 logger = set_logger(get_module_name(__file__))
 
-main_config = Config()
-plugin_config = PluginConfig()
+# all the configurations (PyMoDAQ's packages and the one of your plugin package) are read from GlobalConfig, for
+# instance: config('gui', 'style', 'theme')
+config = GlobalConfig()
 
 
 # todo: modify the name of this class to reflect its application and change the name in the main
@@ -25,10 +29,11 @@ class CustomAppTemplate(gutils.CustomApp):
     def __init__(self, parent: gutils.DockArea):
         super().__init__(parent)
 
-        self.setup_ui()
+        self.setup_ui()  # calls, in this order: setup_docks_and_widgets, setup_menus_and_toolbars,
+        # setup_actions, connect_things and do_things_after_ui_setup
 
-    def setup_docks(self):
-        """Mandatory method to be subclassed to setup the docks layout
+    def setup_docks_and_widgets(self):
+        """Method to be subclassed to setup the docks layout
 
         Examples
         --------
@@ -41,13 +46,32 @@ class CustomAppTemplate(gutils.CustomApp):
         --------
         pyqtgraph.dockarea.Dock
         """
-        # todo: create docks and add them here to hold your widgets
-        # reminder, the attribute self.settings_tree will  render the widgets in a Qtree.
-        # If you wish to see it in your app, add is into a Dock
-        raise NotImplementedError
+        # todo: create docks and add them here to hold your widgets. Here the settings tree in a dock
+        self.docks['settings'] = gutils.Dock('Settings')
+        self.dockarea.addDock(self.docks['settings'])
+        self.docks['settings'].addWidget(self.settings_tree)
+
+    def setup_menus_and_toolbars(self, menubar: QtWidgets.QMenuBar = None):
+        """Non mandatory method to be subclassed in order to create menus and toolbars
+
+        It is called before setup_actions: only create the (empty) menus and toolbars here, the actions are created
+        afterwards in setup_actions where they can be put in them, for instance:
+
+        Examples
+        --------
+        >>> self.add_menu('file', 'File', parent_menu=menubar)  # here
+        >>> self.add_toolbar('main', 'Main toolbar', self.mainwindow)  # here
+        >>> self.add_action('save', 'Save', 'SaveAs', "Save current data", menu='file', toolbar='main')  # in setup_actions
+
+        See Also
+        --------
+        pymodaq_gui.managers.action_manager.ActionManager
+        """
+        # todo create the menus and toolbars of your app here (they will be populated by the actions of setup_actions)
+        pass
 
     def setup_actions(self):
-        """Method where to create actions to be subclassed. Mandatory
+        """Method where to create actions to be subclassed
 
         Examples
         --------
@@ -61,32 +85,13 @@ class CustomAppTemplate(gutils.CustomApp):
         --------
         ActionManager.add_action
         """
-        raise NotImplementedError(f'You have to define actions here')
+        # todo: replace this example action by yours
+        self.add_action('say_hello', 'Say hello', 'add_circle', tip='Show a message in the status bar')
 
     def connect_things(self):
         """Connect actions and/or other widgets signal to methods"""
-        raise NotImplementedError
-
-    def setup_menu(self, menubar: QtWidgets.QMenuBar = None):
-        """Non mandatory method to be subclassed in order to create a menubar
-
-        create menu for actions contained into the self._actions, for instance:
-
-        Examples
-        --------
-        >>>file_menu = menubar.addMenu('File')
-        >>>self.affect_to('load', file_menu)
-        >>>self.affect_to('save', file_menu)
-
-        >>>file_menu.addSeparator()
-        >>>self.affect_to('quit', file_menu)
-
-        See Also
-        --------
-        pymodaq.utils.managers.action_manager.ActionManager
-        """
-        # todo create and populate menu using actions defined above in self.setup_actions
-        pass
+        # todo: replace this example by your connections
+        self.connect_action('say_hello', lambda: self.update_status('Hello'))
 
     def value_changed(self, param):
         """ Actions to perform when one of the param's value in self.settings is changed from the
@@ -106,7 +111,7 @@ class CustomAppTemplate(gutils.CustomApp):
 
 
 def main():
-    from pymodaq_gui.utils.utils import mkQApp
+    from pymodaq_gui.qt_utils import mkQApp
     app = mkQApp('CustomApp')
 
     mainwindow = QtWidgets.QMainWindow()

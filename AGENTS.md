@@ -50,8 +50,8 @@ File and class names must match: `daq_move_<Name>.py` holds `DAQ_Move_<Name>`; `
 `DAQ_<N>DViewer_<Name>` (N = 0, 1, 2 or N). Each file ends with `if __name__ == '__main__': main(__file__)`.
 
 **Actuator** (`DAQ_Move_base`). Override at least, in the order of the template (the order in which to develop them),
-`ini_attributes`, `ini_stage`, `get_actuator_value`, `move_abs`, `move_rel`, `move_home`, `stop_motion`,
-`commit_settings`, `close`.
+`ini_attributes`, `ini_stage`, `close`, `get_actuator_value`, `move_abs`, `move_rel`, `move_home`, `stop_motion`,
+`commit_settings`.
 
 - `ini_stage(controller=None)` returns `(info: str, initialized: bool)`. If `self.is_master`, create the controller;
   otherwise store the `controller` passed in (several axes share one controller).
@@ -65,7 +65,7 @@ File and class names must match: `daq_move_<Name>.py` holds `DAQ_Move_<Name>`; `
   `set_position_with_scaling` and `get_position_with_scaling` as in the template.
 
 **Detector** (`DAQ_Viewer_base`). Override at least, in the order of the template, `ini_attributes`, `ini_detector`,
-`grab_data`, `stop`, `commit_settings`, `close`.
+`close`, `grab_data`, `stop`, `commit_settings`.
 
 - `ini_detector(controller=None)` returns `(info, initialized)`, same master/slave logic.
 - `params = comon_parameters + [...]`.

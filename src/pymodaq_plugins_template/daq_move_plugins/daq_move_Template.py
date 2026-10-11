@@ -103,6 +103,14 @@ class DAQ_Move_Template(DAQ_Move_base):
         info = "Whatever info you want to log"
         return info, initialized
 
+    def close(self):
+        """Terminate the communication protocol"""
+        ## TODO for your custom plugin
+        raise NotImplementedError  # when writing your own plugin remove this line
+        if self.is_master:  # only the master owns the controller; a slave must not close the one it shares
+            #  self.controller.your_method_to_terminate_the_communication()  # when writing your own plugin replace this line
+            ...
+
     def get_actuator_value(self) -> DataActuator:
         """Get the current value from the hardware with scaling conversion.
 
@@ -209,14 +217,6 @@ class DAQ_Move_Template(DAQ_Move_base):
            self.controller.your_method_to_apply_this_param_change()
         else:
             pass
-
-    def close(self):
-        """Terminate the communication protocol"""
-        ## TODO for your custom plugin
-        raise NotImplementedError  # when writing your own plugin remove this line
-        if self.is_master:
-            #  self.controller.your_method_to_terminate_the_communication()  # when writing your own plugin replace this line
-            ...
 
 
 if __name__ == '__main__':

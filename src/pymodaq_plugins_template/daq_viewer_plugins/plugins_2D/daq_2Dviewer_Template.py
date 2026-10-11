@@ -100,6 +100,14 @@ class DAQ_2DViewer_Template(DAQ_Viewer_base):
         info = "Whatever info you want to log"
         return info, initialized
 
+    def close(self):
+        """Terminate the communication protocol"""
+        ## TODO for your custom plugin
+        raise NotImplementedError  # when writing your own plugin remove this line
+        if self.is_master:  # only the master owns the controller; a slave must not close the one it shares
+            #  self.controller.your_method_to_terminate_the_communication()  # when writing your own plugin replace this line
+            ...
+
     def grab_data(self, Naverage=1, **kwargs):
         """Start a grab from the detector
 
@@ -154,14 +162,6 @@ class DAQ_2DViewer_Template(DAQ_Viewer_base):
         if param.name() == "a_parameter_you've_added_in_self.params":
             self.controller.your_method_to_apply_this_param_change()
         #elif ...
-
-    def close(self):
-        """Terminate the communication protocol"""
-        ## TODO for your custom plugin
-        raise NotImplementedError  # when writing your own plugin remove this line
-        if self.is_master:
-            #  self.controller.your_method_to_terminate_the_communication()  # when writing your own plugin replace this line
-            ...
 
 
 if __name__ == '__main__':

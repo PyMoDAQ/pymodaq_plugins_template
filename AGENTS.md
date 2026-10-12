@@ -120,6 +120,14 @@ and the deprecated `CustomApp` / `CustomExt` hooks `setup_docks` and `setup_menu
 
 ## 4. Dashboard extensions (`CustomExt`)
 
+Structure: `CustomApp(QObject, ActionManager, ParameterManager)` gives actions with their toolbar/menu placement,
+the settings tree (`params`, `settings`, `value_changed`), the dock area, the status bar, `h5_manager` and
+`thread_manager`; `CustomExt(CustomApp)` adds `dashboard`, `modules_manager` and the Dashboard toolbar. A worker
+(`ExtensionWorker`) runs in its own thread with a `SaverWorker`; talk to workers with signals only. Two patterns: a standalone app
+(`CustomApp`, no instrument) or a Dashboard extension (`CustomExt`, any use of instruments); embedding control modules in
+a `CustomApp` is possible but not advised. They are drawn, with text versions, in the PyMoDAQ
+documentation page "CustomApp and CustomExt" (`docs/src/developer_folder/custom_app.rst`).
+
 - Entry point group `pymodaq.extensions` in `pyproject.toml`; each module in `extensions/` defines
   `EXTENSION_NAME` (menu label), `CLASS_NAME` (class name) and a class derived from `CustomExt`.
 - Import: `from pymodaq.utils.custom_ext import CustomExt`.

@@ -40,17 +40,37 @@ jobs:
       - uses: actions/setup-python@v6.2.0
         with:
           python-version: ${{ matrix.python-version }}
+      - name: Check that the plugin supports this Python version
+        # a plugin with `requires-python = ">=3.11"` cannot be installed on 3.10: skip the job instead of failing pip
+        id: supported
+        shell: bash
+        run: |
+          python -m pip install packaging tomli
+          python - <<'EOF'
+          import os, sys
+          import tomli
+          from packaging.specifiers import SpecifierSet
+          with open('pyproject.toml', 'rb') as f:
+              spec = tomli.load(f).get('project', {}).get('requires-python', '')
+          version = '.'.join(map(str, sys.version_info[:3]))
+          supported = SpecifierSet(spec).contains(version, prereleases=True) if spec else True
+          print(f'requires-python {spec!r}, running {version}: supported={supported}')
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as out:
+              out.write(f'supported={str(supported).lower()}\n')
+          EOF
       - name: Install system libraries for Qt
-        if: runner.os == 'Linux'
+        if: runner.os == 'Linux' && steps.supported.outputs.supported == 'true'
         run: |
           sudo apt-get update
           sudo apt-get install -y libxkbcommon-x11-0 libxcb-icccm4 libxcb-image0 libxcb-keysyms1 libxcb-cursor0 libxcb-randr0 libxcb-render-util0 libxcb-xinerama0 libxcb-xfixes0 x11-utils libgl1 libegl1
           sudo mkdir -p /etc/.pymodaq
           sudo chmod uo+rw /etc/.pymodaq
       - name: Install the plugin with the latest PyMoDAQ release
+        if: steps.supported.outputs.supported == 'true'
         run: |
           python -m pip install --upgrade pip
           pip install pytest pytest-qt pytest-xvfb ${{ matrix.qt-backend }}
           pip install -e .
       - name: Tests
+        if: steps.supported.outputs.supported == 'true'
         run: pytest -vv tests

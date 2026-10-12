@@ -35,6 +35,8 @@ jobs:
       QT_DEBUG_PLUGINS: 1
     steps:
       - uses: actions/checkout@v7.0.1
+        with:
+          fetch-depth: 0  # history and tags, needed by hatch-vcs: without them the version is 0.1.dev and e.g. pymodaq_plugins_mock cannot satisfy pymodaq's own requirement
       - uses: actions/setup-python@v6.2.0
         with:
           python-version: ${{ matrix.python-version }}

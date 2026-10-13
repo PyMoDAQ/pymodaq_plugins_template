@@ -168,7 +168,10 @@ documentation page "CustomApp and CustomExt" (`docs/src/developer_folder/custom_
   here.
 - Long-running work (a scan, a sequence, a ramp) goes in an `ExtensionWorker` subclass run in a thread, started and
   stopped from the extension's workflow actions, as in `sequencer.py` and `ramping.py`.
-- `__init__(self, parent: DockArea, dashboard)`: call `super().__init__(parent, dashboard)`, then `self.setup_ui()`.
+- `__init__(self, parent: DockArea, dashboard)`: call `super().__init__(parent, dashboard, add_toolbar_break=False)`,
+  then `self.setup_ui()`. An extension has two toolbars: its own, created by the base class (`CustomApp.__init__`,
+  `add_toolbar_break` is `True` by default), and the Dashboard one created by `create_dashboard_toolbar(add_break=False)`
+  in `setup_menus_and_toolbars`. The extensions of PyMoDAQ (scan, sequencer, ramping...) add a break before neither.
 - **Experiment and state belong to the Dashboard.** The *experiment* is the list of instruments (actuators and
   detectors) the Dashboard manages and controls; the *state* is the state of that experiment, mostly the values of the
   instruments' settings and of the Dashboard's actuators. An extension must use the managers it gets through its

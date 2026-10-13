@@ -45,7 +45,9 @@ python install-packages.py -d -qt pyside6     # choose the Qt backend (pyqt5, py
 
 Do not consider a task finished until `check_plugin` and `pytest` pass. Do not invent PyMoDAQ APIs: if a method
 or attribute is not in the base classes (`DAQ_Move_base`, `DAQ_Viewer_base`, `CustomExt`) or in an existing
-plugin, look it up in the installed `pymodaq` package instead of guessing.
+plugin, look it up in the installed `pymodaq` package instead of guessing. The same holds for what you write: a comment,
+a docstring or a documentation sentence that says how PyMoDAQ behaves must come from reading the code that
+implements it, not from memory or from a guess. If you could not verify something, say so.
 
 ## 3. Instrument plugins
 

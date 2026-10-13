@@ -8,7 +8,7 @@ When a new PyMoDAQ minor (say 5.4.0) is released
 ------------------------------------------------
 1. Create the ``5.4.x`` branch from ``5.3.x`` and make it the default branch of the template repository.
 2. On it, raise the floors in pyproject.toml (``pymodaq>=5.4.0``...), the "PyMoDAQ 5.3.x" wording in README.rst and
-   AGENTS.md, the Python classifiers/requires-python and the matrix of reusable-compatibility.yml if they changed.
+   AGENTS.md, requires-python and the matrix of reusable-compatibility.yml if they changed.
 3. Point the three caller workflows (``@5.3.x`` in tests.yml, compatibility.yml, python-publish.yml) to ``@5.4.x``.
 4. Run this script: it must print OK. Keep ``5.3.x`` for hotfixes.
 """
@@ -78,11 +78,8 @@ def main() -> int:
     same_minor = [v for v in versions if minor(v) == branch_minor][-1]
     with urllib.request.urlopen(f'https://pypi.org/pypi/pymodaq/{same_minor}/json', timeout=30) as response:
         data = json.load(response)['info']
-    theirs = python_minors(data['classifiers'])
-    ours = python_minors(project['classifiers'])
-    if theirs and ours != theirs:
-        problems.append(f'Python classifiers of pyproject.toml are 3.{ours[0]}-3.{ours[-1]}, pymodaq {same_minor} says '
-                        f'3.{theirs[0]}-3.{theirs[-1]}')
+    # the Python classifiers of a plugin are computed from requires-python when it is built (dynamic classifiers)
+    ours = theirs = python_minors(data['classifiers'])
     requires = data.get('requires_python') or ''
     if requires and requires != project.get('requires-python'):
         problems.append(f'requires-python is {project.get("requires-python")!r}, pymodaq {same_minor} has {requires!r}')

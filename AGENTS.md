@@ -58,6 +58,12 @@ File and class names must match: `daq_move_<Name>.py` holds `DAQ_Move_<Name>`; `
 to develop them. The list is defined once in `pymodaq_utils.plugin_tools.contract`, with when each method is called and
 what it returns (table in the developer guide, "The methods of a plugin").
 
+- (Actuators and detectors.) A plugin that works on some systems only (a Windows driver, a Raspberry Pi board)
+  declares it in the instrument class, for instance `supported_platforms = ('win32',)` (values of `sys.platform`: `win32`, `linux`, `darwin`) and
+  optionally `supported_architectures = ('aarch64', 'armv7l')` (values of `platform.machine()`). PyMoDAQ then refuses
+  to initialize it elsewhere with a message, and `check_plugin --fix-classifiers` updates the `Operating System`
+  classifiers of the `pyproject.toml` (PMQ320 reports a mismatch). The module must still be importable on every system
+  (PMQ317): import Windows-only code lazily. Needs `pymodaq>=5.3.5`.
 - `ini_stage(controller=None)` returns `(info: str, initialized: bool)`. If `self.is_master`, create the controller;
   otherwise store the `controller` passed in (several axes share one controller).
 - Class attributes: `is_multiaxes`, `_axis_names`, `_controller_units`, `_epsilons`,

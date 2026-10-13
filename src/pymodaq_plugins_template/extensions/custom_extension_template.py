@@ -42,7 +42,9 @@ class CustomExtensionTemplate(CustomExt):
     params = []
 
     def __init__(self, parent: gutils.DockArea, dashboard):
-        super().__init__(parent, dashboard)  # also creates self.modules_manager for this extension
+        # also creates self.modules_manager for this extension, and the extension's own toolbar (named after the
+        # class). Like the PyMoDAQ extensions (scan, sequencer...), no break is added before it
+        super().__init__(parent, dashboard, add_toolbar_break=False)
 
         self.setup_ui()  # calls, in this order: setup_docks_and_widgets, setup_menus_and_toolbars,
         # setup_actions, connect_things and do_things_after_ui_setup
@@ -77,7 +79,7 @@ class CustomExtensionTemplate(CustomExt):
         --------
         pymodaq.utils.managers.action_manager.ActionManager
         """
-        # adds the toolbar showing/hiding the Dashboard, loading an experiment and a state
+        # adds a second toolbar, the Dashboard one: show/hide the Dashboard, load an experiment and a state
         self.create_dashboard_toolbar(add_break=False)
 
     def setup_actions(self):

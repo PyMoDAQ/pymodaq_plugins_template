@@ -34,8 +34,8 @@ pytest                           # template tests (package structure, plugin che
 ```
 
 Installing PyMoDAQ itself is a separate matter. A plugin only needs the released packages (`pymodaq`,
-`pymodaq_utils`, `pymodaq_data`, `pymodaq_gui`, installed as dependencies). If you also have to modify them, work in a
-clone of the PyMoDAQ repository and install the four packages in editable mode with the script at its root, never with
+`pymodaq_utils`, `pymodaq_data`, `pymodaq_gui`, `pymodaq_scripting`, installed as dependencies). If you also have to modify
+them, work in a clone of the PyMoDAQ repository and install the five packages in editable mode with the script at its root, never with
 `pip install -e .` inside each package (the script handles the order and the options):
 
 ```bash
@@ -201,14 +201,14 @@ DataMixer (`DataMixerModel`) and the Sequencer (`ChoiceModelBase`). Write a mode
 extensions already does the job and only the conversion of the measurements or of the outputs is specific.
 
 - Set `models = true` in `[features]`; entry points are generated only then (`pymodaq.models`).
-- Create the `models/` folder at the root of the package, one model per module; the module name is the name shown in
-  the extension. The model is the class defined in the module that derives from the base class of the extension. It may
+- Put your models in the `models/` folder of the package (shipped empty), one model per module; the module name is the
+  name shown in the extension. The model is the class defined in the module that derives from the base class of the extension. It may
   derive from your own intermediate class, but PID and DataMixer only accepted a direct subclass of the generic base
   before the release that follows 5.3.3, so derive directly from it if you must support older releases. The Sequencer
   is the exception: it does not look at base classes, you register each choice model with
   `@ChoiceModelFactory.register_choice()`.
-- The template ships no model on purpose. Start from the working examples of
-  [`pymodaq_plugins_mockexamples`](https://github.com/PyMoDAQ/pymodaq_plugins_mockexamples) (`PIDModelBeamSteering`,
+- The template ships no model on purpose: the `models/` folder is empty, so that you know where to add yours. Start
+  from the working examples of [`pymodaq_plugins_mockexamples`](https://github.com/PyMoDAQ/pymodaq_plugins_mockexamples) (`PIDModelBeamSteering`,
   `PIDModelMockHeater`, `BayesianModelMock`, `DataMixerModelFit`; for the Sequencer, the choice models of
   `pymodaq/extensions/sequencer/models`) and from the page "Models of the extensions" of the PyMoDAQ
   documentation, which lists the methods to implement for each kind. Test a model with the mock actuators and

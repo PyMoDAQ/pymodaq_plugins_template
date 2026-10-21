@@ -71,7 +71,7 @@ class DAQ_Move_Fake(DAQ_Move_base):
 
     def move_home(self):
         self.move_abs(DataActuator(data=0., units=self.axis_unit))
-        self.move_done()  # the position is not polled after move_home: the plugin tells when it is done
+        self.move_done()  # homing is blocking here; an asynchronous one calls move_done when the controller says it ended
 
     def stop_motion(self):
         self.controller.calls.append(('stop',))

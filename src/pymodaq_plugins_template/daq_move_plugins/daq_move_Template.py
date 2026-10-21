@@ -185,12 +185,18 @@ class DAQ_Move_Template(DAQ_Move_base):
         self.emit_status(ThreadCommand('Update_Status', ['Some info you want to log']))
 
     def move_home(self):
-        """Call the reference method of the controller"""
+        """Call the reference method of the controller
+
+        Contrary to move_abs and move_rel, PyMoDAQ does not poll the position to know when the homing is finished.
+        Whether this method blocks until the actuator is at home or only starts the homing (asynchronous), the plugin
+        has to call self.move_done() when the homing process ends, otherwise PyMoDAQ keeps waiting for it.
+        """
 
         ## TODO for your custom plugin
         raise NotImplementedError  # when writing your own plugin remove this line
         self.controller.your_method_to_get_to_a_known_reference()  # when writing your own plugin replace this line
         self.emit_status(ThreadCommand('Update_Status', ['Some info you want to log']))
+        self.move_done()  # blocking homing: call it here. Asynchronous homing: call it once the controller reports the end
 
     def stop_motion(self):
         """Stop the actuator and emits move_done signal"""

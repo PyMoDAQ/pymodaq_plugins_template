@@ -34,8 +34,8 @@ pytest                           # template tests (package structure, plugin che
 ```
 
 Installing PyMoDAQ itself is a separate matter. A plugin only needs the released packages (`pymodaq`,
-`pymodaq_utils`, `pymodaq_data`, `pymodaq_gui`, installed as dependencies). If you also have to modify them, work in a
-clone of the PyMoDAQ repository and install the four packages in editable mode with the script at its root, never with
+`pymodaq_utils`, `pymodaq_data`, `pymodaq_gui`, `pymodaq_scripting`, installed as dependencies). If you also have to modify
+them, work in a clone of the PyMoDAQ repository and install the five packages in editable mode with the script at its root, never with
 `pip install -e .` inside each package (the script handles the order and the options):
 
 ```bash

@@ -104,6 +104,13 @@ what it returns (table in the developer guide, "The methods of a plugin").
   of all the axes of a multiaxes controller.
 - Hardware access code goes in `hardware/`, behind a small wrapper class. This lets the plugin be tested with a
   mock controller and keeps the plugin file readable.
+- For the communication with the instrument, copy the matching recipe of the cookbook of
+  [`pymodaq_plugins_mockexamples`](https://github.com/PyMoDAQ/pymodaq_plugins_mockexamples#cookbook-of-device-patterns)
+  instead of writing it from memory: a text protocol with `pymeasure` (recommended), a serial line, VISA, a C library
+  with `ctypes`, a .NET assembly with `pythonnet`, a camera (ROI, binning, exposure, calibrated axes) or a
+  spectrometer (an axis that changes). Each recipe runs on a simulated device (leave the port to `MOCK`) and its file
+  header says what to copy, adapt and keep. The PyMoDAQ documentation page "Plugin cookbook"
+  (`docs/src/developer_folder/plugin_cookbook.rst`) lists them.
 - Defaults live in `resources/config_template.toml`, not in the code. Read configuration values through
   `GlobalConfig` from `pymodaq_utils.config`: a singleton that wraps the `Config` objects of all packages, e.g.
   `GlobalConfig()('gui', 'style', 'theme')`. Do not parse the toml files yourself, and do not instantiate a `Config`
@@ -187,6 +194,9 @@ documentation page "CustomApp and CustomExt" (`docs/src/developer_folder/custom_
   (only creates the menus and toolbars), `setup_actions` (creates the actions and can put them in those menus and
   toolbars with `add_action(..., menu=..., toolbar=...)`), `connect_things`, then `value_changed`, `quit_fun`. `setup_docks` and `setup_menu` are deprecated. The GUI thread runs
   your code; react to module signals, never poll or sleep.
+- Status indicators (LEDs, icons) take their colours from `StatusPalette` / `Status` in
+  `pymodaq_gui/utils/status_palette.py` (off, idle, running, warning, error, critical), never from hard-coded colours.
+  `error` (orange) is an operation that failed and may recover, `critical` (red) an unrecoverable fault.
 
 ## 5. Standalone apps (`CustomApp`)
 

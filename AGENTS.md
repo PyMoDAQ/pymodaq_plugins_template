@@ -87,6 +87,27 @@ what it returns (table in the developer guide, "The methods of a plugin").
 - Data leaves the plugin as `DataToExport` containing `DataFromPlugins` (with `dim='Data0D'|'Data1D'|'Data2D'|'DataND'`,
   `labels`, `axes=[Axis(...)]`) emitted through `self.dte_signal` (grab) or `self.dte_signal_temp` (live preview).
 
+**Who runs where** (diagrams: the PyMoDAQ documentation page "How an instrument plugin works with the Dashboard",
+`docs/src/developer_folder/plugin_workflow.rst`). Three objects talk through Qt signals:
+
+- the *control module* (`DAQ_Move` or `DAQ_Viewer`, with its user interface) lives in the GUI thread. It sends
+  `ThreadCommand`s to the worker (`command_hardware`) and receives its answers (`status_sig`, handled in
+  `thread_status`);
+- a *worker* (`ActuatorWorker` or `DetectorWorker`) and your *plugin* live in the plugin thread: one thread per
+  controller, created by the master, in which its slaves (same *Controller ID*) run too. The worker calls `ini_stage`,
+  `move_abs`, `grab_data`... and sends back what the plugin emits (`emit_status`, `move_done_signal`, `dte_signal`);
+- the *controller* (the driver object) is created by your plugin in `ini_stage` or `ini_detector` and used in the plugin
+  thread only. A thread of the driver (a callback, a wait for a frame) only emits a Qt signal.
+
+A move: after `move_abs` PyMoDAQ polls (default) `get_actuator_value` every `polling_interval_ms` until the value is
+within `epsilon` of the target, or the `timeout` setting is exceeded, then calls `move_done`; without polling it calls
+`move_done` right after `move_abs` returns; a move that ends later (a homing, a driver event) calls `move_done` itself.
+The worker forwards it once per move. A grab: the plugin emits a `DataToExport` with `dte_signal`; the worker averages
+it if `Naverage > 1` and the plugin does not (`hardware_averaging`), and sends it to the GUI. With
+`live_mode_available` the plugin is called once and streams until `stop`, otherwise the worker calls it again after
+each data. An exception raised by a plugin method is caught by the worker and shown as an error of the module, so do not
+catch it to hide it.
+
 **Rules that matter**
 
 - Plugin code runs in a worker thread. **Never create or touch Qt widgets** from it. Report progress with

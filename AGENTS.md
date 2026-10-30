@@ -151,6 +151,12 @@ against a fake that encodes what you believe the driver does. They say nothing a
 real ranges and units. A passing run is not a hardware validation: never state that a plugin works on an instrument
 that was not used, say what was tested on the real device and what only against a fake.
 
+**Testing a Dashboard extension.** `tests/test_plugin_extensions.py` subclasses `PluginExtensionChecks`
+(`pymodaq.utils.plugin_testing.extension_testing`, PyMoDAQ >= 5.3.7): every module of `extensions/` that defines
+`EXTENSION_NAME` is loaded in an empty Dashboard and closed. For the behaviour of your extension, write tests with the
+`loaded_extension(MyExtension)` context manager, which yields `(dashboard, extension)` and closes and deletes the windows
+at exit (leaving them alive slows down every test that runs afterwards). Delete the file if the package has no extension.
+
 **Legacy patterns to avoid** (older tutorials and models still produce them; `check_plugin` flags several):
 `stage_names` (use `_axis_names`), `_epsilon` (use `_epsilons`), `data_actuator_type = float` (use
 `DataActuatorType.DataActuator`), the group names `multiaxes` and `multi_status` (now `controller` and

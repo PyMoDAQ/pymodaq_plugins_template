@@ -24,7 +24,7 @@ jobs:
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@v7.0.1
-      - uses: actions/setup-python@v6.2.0
+      - uses: actions/setup-python@v7.1.0
         with:
           python-version: '3.12'
       - run: python .github/scripts/check_template_versions.py

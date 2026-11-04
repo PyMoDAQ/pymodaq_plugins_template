@@ -23,16 +23,6 @@ Use this template to create a repository on your account and start the developme
 
 This branch targets **PyMoDAQ 5.3.x** (Python 3.10 to 3.13). Use the branch matching your PyMoDAQ version.
 
-Development
-===========
-
-* Install your plugin in editable mode: ``pip install -e .``
-* Check it, without any hardware: ``check_plugin`` (and ``pytest``)
-* If you use an AI coding assistant, point it to ``AGENTS.md``: it describes the patterns to follow for instrument
-  plugins, Dashboard extensions (``CustomExt``, whenever instruments are involved) and standalone apps
-  (``CustomApp``, only if no instruments are needed).
-
-
 Authors
 =======
 
@@ -97,3 +87,13 @@ Installation instructions
 * PyMoDAQ’s version.
 * Operating system’s version.
 * What manufacturer’s drivers should be installed to make this plugin run?
+
+
+Development
+===========
+
+* Install your plugin in editable mode: ``pip install -e .``
+* Check it, without any hardware: ``check_plugin`` (and ``pytest``)
+* If you use an AI coding assistant, point it to ``AGENTS.md``: it describes the patterns to follow for instrument
+  plugins, Dashboard extensions (``CustomExt``, whenever instruments are involved) and standalone apps
+  (``CustomApp``, only if no instruments are needed).

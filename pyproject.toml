@@ -10,7 +10,14 @@ package-url = 'https://github.com/PyMoDAQ/pymodaq_plugins_template' #todo modify
 
 [project]
 name = "pymodaq_plugins_template" #todo modify template by your plugin short name
-description = 'some word about your plugin'
+description = 'some word about your plugin'  #todo: one sentence naming the instrument(s) and what it does, shown on PyPI
+keywords = [
+    "pymodaq",
+    "plugin",
+    "instrument control",
+    "data acquisition",
+    #todo: add the instrument, manufacturer and measurement type (camera, stage, spectrometer...)
+]
 dependencies = [
     "pymodaq>=5.3.7",
     "pymodaq_utils>=5.3.1",
@@ -56,8 +63,10 @@ classifiers = [
     "Intended Audience :: Science/Research",
     "License :: OSI Approved :: MIT License",
     "Natural Language :: English",
+    "Topic :: Scientific/Engineering",
     "Topic :: Scientific/Engineering :: Human Machine Interfaces",
     "Topic :: Scientific/Engineering :: Visualization",
     "Topic :: Software Development :: Libraries :: Python Modules",
     "Topic :: Software Development :: User Interfaces",
+    "Topic :: System :: Hardware :: Hardware Drivers",
 ]

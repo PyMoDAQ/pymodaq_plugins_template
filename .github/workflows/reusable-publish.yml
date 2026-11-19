@@ -21,7 +21,7 @@ jobs:
       - uses: actions/checkout@v7.0.1
         with:
           fetch-depth: 0  # history and tags, needed by hatch-vcs for the version
-      - uses: actions/setup-python@v6.2.0
+      - uses: actions/setup-python@v7.1.0
         with:
           python-version: '3.x'
       - name: Install build tools

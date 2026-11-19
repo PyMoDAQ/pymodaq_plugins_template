@@ -258,6 +258,8 @@ extensions already does the job and only the conversion of the measurements or o
 - [ ] Names (package, files, classes) match and the `template` placeholders are gone.
 - [ ] The `[features]` flags at the top of `pyproject.toml` match the folders you use (`instruments`, `extensions`,
       `models`...): entry points are generated only for the features set to `true` (`check_plugin` warns, PMQ109).
+- [ ] `description` and `keywords` in `pyproject.toml` name the instrument, its manufacturer and what it measures or
+      drives: this is what PyPI search, and people or assistants looking for a plugin, will match.
 - [ ] `check_plugin` passes; no `NotImplementedError` or `TODO` left in the files you wrote.
 - [ ] Units set on all actuator values and axes; safe behaviour in `close()` and on errors.
 - [ ] Tests added for new behaviour using a mock controller (no real hardware in CI).

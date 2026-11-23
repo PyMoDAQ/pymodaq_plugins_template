@@ -21,7 +21,7 @@ jobs:
       #  - each Qt backend at least once (pyqt6, pyside6), PySide6 on both Python extremes,
       #  - Windows once, with an intermediate Python version (3.12).
       # Not tested on purpose: Python 3.11 and 3.12 on Linux, Windows with pyside6, PyQt6 with Python 3.11 and 3.12 on Linux. The plugin tests are fast, so if a plugin needs more coverage, replace `include` by the
-      # three lists `os`, `python-version` and `qt-backend`: GitHub then builds the 24 combinations.
+      # three lists `os`, `python-version` and `qt-backend`: GitHub then builds the 16 combinations.
       # When a Python version is added or dropped (follow pymodaq), update the extremes here.
       matrix:
         include:

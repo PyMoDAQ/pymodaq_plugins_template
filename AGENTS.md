@@ -40,7 +40,7 @@ them, work in a clone of the PyMoDAQ repository and install the five packages in
 
 ```bash
 python install-packages.py -d                 # editable + dev extras, from the PyMoDAQ repository root
-python install-packages.py -d -qt pyside6     # choose the Qt backend (pyqt5, pyqt6 or pyside6)
+python install-packages.py -d -qt pyside6     # choose the Qt backend (pyqt6 or pyside6)
 ```
 
 Do not consider a task finished until `check_plugin` and `pytest` pass. Do not invent PyMoDAQ APIs: if a method

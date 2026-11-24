@@ -21,7 +21,7 @@ pymodaq_plugins_template
 
 Use this template to create a repository on your account and start the development of your own PyMoDAQ plugin!
 
-This branch targets **PyMoDAQ 5.3.x** (Python 3.11 to 3.14). Use the branch matching your PyMoDAQ version.
+This branch targets **PyMoDAQ 5.4.x** (Python 3.11 to 3.14). Use the branch matching your PyMoDAQ version.
 
 Authors
 =======

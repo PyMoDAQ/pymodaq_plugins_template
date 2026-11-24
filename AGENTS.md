@@ -1,6 +1,6 @@
 # AGENTS.md
 
-Guidance for AI coding assistants (and humans) building on **PyMoDAQ 5.3.x** from this template.
+Guidance for AI coding assistants (and humans) building on **PyMoDAQ 5.4.x** from this template.
 PyMoDAQ is a Qt framework that drives lab experiments: hardware is added through small *plugins*, and PyMoDAQ
 provides the GUI, threading, data model, scans and HDF5 saving. Python 3.11 to 3.14.
 

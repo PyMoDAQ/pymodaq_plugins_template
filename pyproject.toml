@@ -40,7 +40,7 @@ maintainers = [
 dynamic = ["version", "urls", "entry-points", "classifiers"]
 readme = "README.rst"
 license = { file="LICENSE" }
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 
 [build-system]
 requires = [

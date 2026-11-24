@@ -2,7 +2,7 @@
 
 Guidance for AI coding assistants (and humans) building on **PyMoDAQ 5.3.x** from this template.
 PyMoDAQ is a Qt framework that drives lab experiments: hardware is added through small *plugins*, and PyMoDAQ
-provides the GUI, threading, data model, scans and HDF5 saving. Python 3.10 to 3.13.
+provides the GUI, threading, data model, scans and HDF5 saving. Python 3.11 to 3.14.
 
 This repository is a plugin package named `pymodaq_plugins_<name>`. Rename everything that still says `template`
 before publishing.

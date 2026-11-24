@@ -32,8 +32,18 @@ def minor(version: str) -> tuple:
     return tuple(int(p) for p in version.split('.')[:2])
 
 
+VERSION = re.compile(r'(\d+)\.(\d+)\.(\d+)(?:(a|b|rc)(\d+))?')  # releases and their a/b/rc pre-releases
+PRE_RANK = {'a': 0, 'b': 1, 'rc': 2, None: 3}
+
+
 def is_release(version: str) -> bool:
-    return re.fullmatch(r'\d+\.\d+\.\d+', version) is not None
+    """A final release or an alpha/beta/rc (not .dev or .post): pre-releases count while a new minor is not final"""
+    return VERSION.fullmatch(version) is not None
+
+
+def version_key(version: str) -> tuple:
+    major, minor_, patch, pre, number = VERSION.fullmatch(version).groups()
+    return int(major), int(minor_), int(patch), PRE_RANK[pre], int(number or 0)
 
 
 def python_minors(classifiers: list) -> list:
@@ -47,11 +57,11 @@ def main() -> int:
 
     floors = {}
     for dep in project['dependencies']:
-        match = re.match(r'(pymodaq(?:_utils|_gui|_data)?)>=(\d+\.\d+\.\d+)', dep)
+        match = re.match(r'(pymodaq(?:_utils|_gui|_data)?)>=(\d+\.\d+\.\d+(?:(?:a|b|rc)\d+)?)', dep)
         if match:
             floors[match.group(1)] = match.group(2)
     if 'pymodaq' not in floors:
-        problems.append('pyproject.toml has no "pymodaq>=X.Y.Z" dependency: nothing to compare to')
+        problems.append('pyproject.toml has no "pymodaq>=X.Y.Z" (or X.Y.ZaN) dependency: nothing to compare to')
         return report(problems)
     branch_minor = minor(floors['pymodaq'])
     branch = '{}.{}'.format(*branch_minor)
@@ -68,7 +78,7 @@ def main() -> int:
 
     # 2. a new PyMoDAQ minor means a new template branch
     latest = pypi_info('pymodaq')
-    versions = sorted((v for v in latest['releases'] if is_release(v)), key=lambda v: tuple(map(int, v.split('.'))))
+    versions = sorted((v for v in latest['releases'] if is_release(v)), key=version_key)
     newest = versions[-1]
     if minor(newest) > branch_minor:
         problems.append(f'PyMoDAQ {newest} is out but this template targets {branch}.x: create the {"{}.{}".format(*minor(newest))}.x '
